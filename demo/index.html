@@ -19,7 +19,6 @@
     --line: #e6e8ee;
     --field: #f7f8fb;
     --field-focus: #ffffff;
-    --summary-bg: #f8f9fc;
     --ok: #16a34a;
     --err: #e11d48;
     --ring: rgba(255,2,48,.18);
@@ -35,59 +34,32 @@
       radial-gradient(1100px 520px at 85% -12%, #1b2440 0%, transparent 60%),
       radial-gradient(820px 460px at -10% 8%, #2a0f1c 0%, transparent 58%),
       var(--pay-navy);
-    padding: max(18px, env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
-    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding: max(18px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; align-items: center;
   }
 
-  .langbar { width: 100%; max-width: 880px; display: flex; justify-content: flex-end; margin: 2px 0 10px; }
-  .lang { display: inline-flex; align-items: center; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; overflow: hidden; }
-  .lang svg { width: 14px; height: 14px; color: #aeb6c6; margin: 0 6px 0 10px; }
-  .lang button { border: 0; background: transparent; color: #aeb6c6; font: inherit; font-size: 13px; font-weight: 600; padding: 0 16px; cursor: pointer; min-height: 44px; min-width: 48px; }
+  .shell { width: 100%; max-width: 440px; }
+
+  /* Language toggle with flags */
+  .langbar { display: flex; justify-content: flex-end; margin: 2px 2px 12px; }
+  .lang { display: inline-flex; align-items: center; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang button { display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent; color: #c2c9d6; font: inherit; font-size: 13px; font-weight: 600; padding: 0 14px; cursor: pointer; min-height: 44px; border-radius: 999px; -webkit-tap-highlight-color: transparent; }
   .lang button.active { background: #fff; color: var(--pay-navy); }
+  .lang button img { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; display: block; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
 
-  .checkout {
-    width: 100%; max-width: 880px; background: var(--card);
-    border-radius: 20px; box-shadow: var(--shadow); overflow: hidden;
-  }
+  .card { background: var(--card); border-radius: 20px; box-shadow: var(--shadow); padding: 22px 20px 20px; }
 
-  /* ---------- Summary (left) ---------- */
-  .summary { background: var(--summary-bg); }
-  .merchant { display: flex; align-items: center; gap: 12px; }
-  .merchant .avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--pay-red), var(--pay-purple)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 19px; flex-shrink: 0; box-shadow: 0 8px 22px -8px rgba(255,2,48,.6); }
+  /* Merchant chip */
+  .merchant { display: flex; align-items: center; gap: 12px; padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+  .merchant .avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--pay-red), var(--pay-purple)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 19px; flex-shrink: 0; box-shadow: 0 8px 22px -8px rgba(255,2,48,.5); }
   .merchant .who { line-height: 1.3; min-width: 0; }
   .merchant .who small { font-size: 11.5px; color: var(--muted); display: block; }
   .merchant .who b { font-size: 16px; display: block; overflow: hidden; text-overflow: ellipsis; }
-
-  .amount-big { margin-top: 22px; }
-  .amount-big .lbl { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-  .amount-big .val { font-size: 30px; font-weight: 800; color: var(--pay-red); letter-spacing: -.01em; margin-top: 4px; }
-
-  .trust { }
-  .trust .schemes { display: flex; flex-wrap: wrap; gap: 7px; }
-  .trust .mark { width: 44px; height: 29px; border: 1px solid var(--line); border-radius: 6px; background: #fff; display: grid; place-items: center; padding: 5px 6px; }
-  .trust .mark img { max-width: 100%; max-height: 100%; width: auto; object-fit: contain; display: block; }
-  .trust .badges { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
-  .trust .badges .vs { height: 32px; } .trust .badges .idc { height: 21px; }
-  .trust .badges img { height: 100%; width: auto; display: block; }
-  .trust .poweredby { display: flex; align-items: center; gap: 7px; margin-top: 16px; color: var(--muted); font-size: 12px; }
-  .trust .poweredby img { height: 15px; width: auto; display: block; }
-  .trust .secured { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; margin-top: 12px; }
-  .trust .secured svg { width: 14px; height: 14px; flex-shrink: 0; }
-
-  /* ---------- Payment (right) ---------- */
-  .payment { }
-  .wallets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .wallet { height: 48px; border-radius: 12px; border: 0; cursor: pointer; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
-  .wallet:active { transform: translateY(1px); }
-  .wallet svg { height: 21px; width: auto; display: block; }
-  .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; margin: 16px 0 14px; }
-  .divider::before, .divider::after { content: ""; height: 1px; background: var(--line); flex: 1; }
 
   .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 16px; }
   .segmented button { min-height: 44px; border: 0; background: transparent; border-radius: 9px; font: inherit; font-size: 14px; font-weight: 600; color: var(--ink-2); cursor: pointer; transition: .15s; -webkit-tap-highlight-color: transparent; }
   .segmented button[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(11,18,36,.12); }
 
-  /* Stacked panels => constant height, switching never resizes the form */
   .panels { display: grid; }
   .panels > .panel { grid-area: 1 / 1; min-width: 0; }
   .panel { visibility: hidden; }
@@ -122,7 +94,7 @@
   .saved { display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; cursor: pointer; min-height: 60px; transition: border-color .15s, background .15s; }
   .saved:has(input:checked) { border-color: var(--pay-red); background: #fff5f6; }
   .saved input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .saved .brand { width: 46px; height: 30px; border-radius: 5px; border: 1px solid var(--line); display: grid; place-items: center; background: #fff; flex-shrink: 0; padding: 4px; }
+  .saved .brand { width: 46px; height: 30px; border-radius: 5px; border: 1px solid var(--line); display: grid; place-items: center; background: #fff; flex-shrink: 0; padding: 4px; overflow: hidden; }
   .saved .brand img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
   .saved .info { line-height: 1.3; min-width: 0; }
   .saved .info b { font-size: 14.5px; letter-spacing: .02em; }
@@ -133,43 +105,47 @@
   .saved-actions { margin-top: 10px; }
   .saved-actions a { color: var(--pay-red); font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
 
-  /* Inline red amount before Pay (mobile) */
-  .amount-inline { display: flex; align-items: baseline; justify-content: space-between; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
-  .amount-inline .lbl { font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-  .amount-inline .val { font-size: 20px; font-weight: 800; color: var(--pay-red); }
+  /* Transaction amount (red) before Pay */
+  .amount { display: flex; align-items: baseline; justify-content: space-between; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .amount .lbl { font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+  .amount .val { font-size: 22px; font-weight: 800; color: var(--pay-red); }
 
-  .pay { margin-top: 16px; width: 100%; height: 54px; border: 0; border-radius: 13px; cursor: pointer; background: var(--pay-red); color: #fff; font: inherit; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 9px; transition: background .15s, transform .05s; -webkit-tap-highlight-color: transparent; }
+  .pay { margin-top: 14px; width: 100%; height: 54px; border: 0; border-radius: 13px; cursor: pointer; background: var(--pay-red); color: #fff; font: inherit; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 9px; transition: background .15s, transform .05s; -webkit-tap-highlight-color: transparent; }
   .pay:hover { background: var(--pay-red-press); }
   .pay:active { transform: translateY(1px); }
   .pay:disabled { opacity: .55; cursor: not-allowed; }
   .pay .lock { width: 16px; height: 16px; }
-  .cancel { display: block; width: 100%; min-height: 44px; text-align: center; margin-top: 6px; background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; padding: 10px; cursor: pointer; }
 
-  .note { color: rgba(255,255,255,.55); font-size: 11.5px; text-align: center; margin: 14px auto 0; max-width: 620px; line-height: 1.5; }
+  /* Express wallets - below card form (alternative payment) */
+  .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; margin: 18px 0 14px; }
+  .divider::before, .divider::after { content: ""; height: 1px; background: var(--line); flex: 1; }
+  .wallets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wallet { height: 48px; border-radius: 12px; border: 0; cursor: pointer; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
+  .wallet:active { transform: translateY(1px); }
+  .wallet svg { height: 21px; width: auto; display: block; }
+
+  .cancel { display: block; width: 100%; min-height: 44px; text-align: center; margin-top: 12px; background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; padding: 10px; cursor: pointer; }
+
+  /* Footer: accepted marks + security + powered by */
+  .foot { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .foot .accepted { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; }
+  .foot .mark { width: 50px; height: 32px; border: 1px solid var(--line); border-radius: 6px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 5px 6px; overflow: hidden; flex: 0 0 auto; }
+  .foot .mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .foot .security { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+  .foot .security .vs { height: 30px; } .foot .security .idc { height: 20px; }
+  .foot .security img { height: 100%; width: auto; display: block; }
+  .foot .secured { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
+  .foot .secured svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .foot .poweredby { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 14px; color: var(--muted); font-size: 12px; }
+  .foot .poweredby img { height: 15px; width: auto; display: block; }
+
+  .note { color: rgba(255,255,255,.5); font-size: 11.5px; text-align: center; margin: 14px auto 0; max-width: 440px; line-height: 1.5; }
 
   body:not(.sr) [data-lang="sr"] { display: none !important; }
   body.sr [data-lang="en"] { display: none !important; }
 
-  /* ---------- Horizontal layout: desktop + tablet ---------- */
-  @media (min-width: 760px) {
-    .checkout { display: grid; grid-template-columns: 288px 1fr; align-items: stretch; }
-    .summary { display: flex; flex-direction: column; padding: 28px 24px; border-right: 1px solid var(--line); }
-    .summary .trust { margin-top: auto; padding-top: 24px; }
-    .payment { padding: 28px 28px; }
-    .amount-inline { display: none; }   /* desktop shows amount in summary */
-  }
-  /* ---------- Vertical layout: phone ---------- */
-  @media (max-width: 759px) {
-    .checkout { display: flex; flex-direction: column; }
-    .summary { display: contents; }
-    .merchant { order: 1; padding: 18px 18px 0; }
-    .amount-big { display: none; }       /* phone shows amount before Pay */
-    .payment { order: 2; padding: 16px 18px 18px; }
-    .trust { order: 3; padding: 4px 18px 20px; }
-    .trust .schemes { justify-content: center; }
-    .trust .badges, .trust .poweredby, .trust .secured { justify-content: center; }
-    .trust .poweredby { border-top: 1px solid var(--line); padding-top: 14px; }
-    /* Natural height on phone (length may change; constant height only needed on desktop/tablet) */
+  /* Phone: panels use natural height (length may change, allowed on phone) */
+  @media (max-width: 559px) {
     .panels { display: block; }
     .panel { visibility: visible; display: none; }
     .panel.active { display: block; }
@@ -177,19 +153,18 @@
 </style>
 </head>
 <body>
+  <main class="shell">
 
-  <div class="langbar">
-    <span class="lang" role="group" aria-label="Language">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
-      <button id="btn-sr" onclick="setLang('sr')">SR</button>
-    </span>
-  </div>
+    <div class="langbar">
+      <span class="lang" role="group" aria-label="Language">
+        <button id="btn-en" class="active" onclick="setLang('en')"><img src="logos/flag-gb.svg" alt="">EN</button>
+        <button id="btn-sr" onclick="setLang('sr')"><img src="logos/flag-rs.svg" alt="">SR</button>
+      </span>
+    </div>
 
-  <section class="checkout">
+    <section class="card">
 
-    <!-- SUMMARY (left on desktop, split top/bottom on phone) -->
-    <div class="summary">
+      <!-- Merchant -->
       <div class="merchant">
         <div class="avatar">Z</div>
         <div class="who">
@@ -197,47 +172,6 @@
           <b>zona.dcx.rs</b>
         </div>
       </div>
-
-      <div class="amount-big">
-        <div class="lbl" data-lang="en">Transaction amount</div><div class="lbl" data-lang="sr">Iznos transakcije</div>
-        <div class="val">4,009.04 RSD</div>
-      </div>
-
-      <div class="trust">
-        <div class="schemes" aria-label="Accepted cards">
-          <span class="mark"><img src="logos/visa.svg" alt="Visa"></span>
-          <span class="mark"><img src="logos/mastercard.svg" alt="Mastercard"></span>
-          <span class="mark"><img src="logos/maestro.svg" alt="Maestro"></span>
-          <span class="mark"><img src="logos/dinacard.svg" alt="DinaCard"></span>
-          <span class="mark"><img src="logos/unionpay.svg" alt="UnionPay"></span>
-        </div>
-        <div class="badges" aria-label="3-D Secure programs">
-          <span class="vs"><img src="logos/visa_secure.svg" alt="Visa Secure"></span>
-          <span class="idc"><img src="logos/mc_idcheck.svg" alt="Mastercard ID Check"></span>
-        </div>
-        <div class="secured">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span data-lang="en">Secured by 3-D Secure</span><span data-lang="sr">Zaštićeno 3-D Secure tehnologijom</span>
-        </div>
-        <div class="poweredby">
-          <span data-lang="en">Powered by</span><span data-lang="sr">Omogućava</span>
-          <img src="logos/payten.png" alt="Payten">
-        </div>
-      </div>
-    </div>
-
-    <!-- PAYMENT (right on desktop) -->
-    <div class="payment">
-      <div class="wallets">
-        <button type="button" class="wallet" id="gpay" aria-label="Google Pay">
-          <svg viewBox="0 0 41 17" xmlns="http://www.w3.org/2000/svg"><path d="M19.5 8.4v4.9h-1.6V1.4h4.1c1 0 1.9.3 2.6 1 .7.6 1.1 1.5 1.1 2.4 0 1-.4 1.8-1.1 2.4-.7.7-1.6 1-2.6 1h-2.5zm0-5.5v4h2.6c.6 0 1.1-.2 1.5-.6.8-.8.8-2 0-2.8-.4-.4-.9-.6-1.5-.6z" fill="#fff"/><path d="M28.9 4.7c1.1 0 2 .3 2.7.9.6.6 1 1.4 1 2.5v5.2h-1.5v-1.2h-.1c-.6 1-1.5 1.4-2.5 1.4-.9 0-1.7-.3-2.3-.8-.6-.5-.9-1.2-.9-2 0-.9.3-1.5.9-2 .7-.5 1.5-.7 2.6-.7.9 0 1.7.2 2.2.5v-.4c0-.5-.2-1-.6-1.3-.4-.4-.9-.5-1.5-.5-.8 0-1.5.4-2 1l-1.4-.9c.8-1 1.9-1.4 3.4-1.4zm-2.1 6.3c0 .4.2.7.5.9.3.3.7.4 1.1.4.6 0 1.2-.2 1.6-.7.5-.4.7-1 .7-1.6-.4-.3-1-.5-1.8-.5-.6 0-1.1.1-1.5.4-.4.3-.6.6-.6 1.1z" fill="#fff"/><path d="M41 5l-5.2 11.9h-1.6l1.9-4.2-3.4-7.7h1.7l2.5 6 2.4-6z" fill="#fff"/><path d="M13.3 7.5c0-.5 0-.9-.1-1.4H6.8v2.6h3.7c-.2.9-.6 1.6-1.4 2.1v1.7h2.3c1.3-1.2 2-3 2-5z" fill="#4285F4"/><path d="M6.8 14.3c1.9 0 3.5-.6 4.6-1.7l-2.3-1.7c-.6.4-1.4.7-2.3.7-1.8 0-3.3-1.2-3.9-2.8H.6v1.8c1.2 2.3 3.5 3.7 6.2 3.7z" fill="#34A853"/><path d="M2.9 8.7c-.2-.5-.2-1-.2-1.5s.1-1 .2-1.5V3.9H.6C.2 4.9 0 5.9 0 7.2s.2 2.3.6 3.3z" fill="#FBBC04"/><path d="M6.8 2.9c1 0 1.9.4 2.6 1l2-2C10.2.7 8.7 0 6.8 0 4.1 0 1.8 1.5.6 3.9l2.3 1.8c.6-1.6 2.1-2.8 3.9-2.8z" fill="#EA4335"/></svg>
-        </button>
-        <button type="button" class="wallet" id="apay" aria-label="Apple Pay">
-          <svg viewBox="0 0 44 19" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M8.1 2.6c.5-.6.8-1.4.7-2.3-.7 0-1.6.5-2.1 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.6-.4 2.2-1zM8.8 3.8c-1.2-.1-2.2.7-2.8.7-.6 0-1.5-.6-2.4-.6C2.3 3.9 1.1 4.6.5 5.8c-1.3 2.2-.3 5.5.9 7.3.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2.1 0 0-1.9-.7-1.9-2.9 0-1.8 1.5-2.7 1.6-2.7-.9-1.3-2.2-1.5-2.6-1.5z"/><path d="M19.6 1.9c2.2 0 3.7 1.5 3.7 3.7s-1.6 3.7-3.8 3.7h-2.4v3.8h-1.7V1.9zm-2.5 6h2c1.5 0 2.4-.8 2.4-2.3 0-1.4-.9-2.3-2.4-2.3h-2zM23.7 10.9c0-1.4 1.1-2.3 3-2.4l2.2-.1v-.6c0-.9-.6-1.4-1.6-1.4-.9 0-1.5.4-1.6 1.1h-1.6c.1-1.5 1.3-2.5 3.3-2.5 1.9 0 3.2 1 3.2 2.6v5.5h-1.6v-1.3h-.1c-.5.9-1.5 1.4-2.5 1.4-1.5 0-2.6-.9-2.6-2.3zm5.2-.7v-.6l-1.9.1c-1 .1-1.5.5-1.5 1.1 0 .7.5 1.1 1.4 1.1 1.1 0 2-.8 2-1.7zM31.9 16.2v-1.3c.1 0 .4 0 .5 0 .7 0 1.1-.3 1.4-1.1l.2-.5-2.9-8.1h1.8l2 6.5h.1l2-6.5h1.8l-3 8.5c-.7 2-1.5 2.6-3.2 2.6-.1 0-.5 0-.7-.1z"/></svg>
-        </button>
-      </div>
-
-      <div class="divider"><span data-lang="en">or pay with card</span><span data-lang="sr">ili platite karticom</span></div>
 
       <div class="segmented" role="tablist" aria-label="Card source">
         <button role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new"><span data-lang="en">New card</span><span data-lang="sr">Nova kartica</span></button>
@@ -323,7 +257,7 @@
           </div>
         </div>
 
-        <div class="amount-inline">
+        <div class="amount">
           <span class="lbl" data-lang="en">Transaction amount</span><span class="lbl" data-lang="sr">Iznos transakcije</span>
           <span class="val">4,009.04 RSD</span>
         </div>
@@ -332,13 +266,49 @@
           <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
           <span data-lang="en">Pay</span><span data-lang="sr">Plati</span>
         </button>
-        <button type="button" class="cancel" id="cancel"><span data-lang="en">Cancel</span><span data-lang="sr">Odustani</span></button>
       </form>
-    </div>
 
-  </section>
+      <!-- Express alternatives -->
+      <div class="divider"><span data-lang="en">or pay with</span><span data-lang="sr">ili platite sa</span></div>
+      <div class="wallets">
+        <button type="button" class="wallet" id="gpay" aria-label="Google Pay">
+          <svg viewBox="0 0 41 17" xmlns="http://www.w3.org/2000/svg"><path d="M19.5 8.4v4.9h-1.6V1.4h4.1c1 0 1.9.3 2.6 1 .7.6 1.1 1.5 1.1 2.4 0 1-.4 1.8-1.1 2.4-.7.7-1.6 1-2.6 1h-2.5zm0-5.5v4h2.6c.6 0 1.1-.2 1.5-.6.8-.8.8-2 0-2.8-.4-.4-.9-.6-1.5-.6z" fill="#fff"/><path d="M28.9 4.7c1.1 0 2 .3 2.7.9.6.6 1 1.4 1 2.5v5.2h-1.5v-1.2h-.1c-.6 1-1.5 1.4-2.5 1.4-.9 0-1.7-.3-2.3-.8-.6-.5-.9-1.2-.9-2 0-.9.3-1.5.9-2 .7-.5 1.5-.7 2.6-.7.9 0 1.7.2 2.2.5v-.4c0-.5-.2-1-.6-1.3-.4-.4-.9-.5-1.5-.5-.8 0-1.5.4-2 1l-1.4-.9c.8-1 1.9-1.4 3.4-1.4zm-2.1 6.3c0 .4.2.7.5.9.3.3.7.4 1.1.4.6 0 1.2-.2 1.6-.7.5-.4.7-1 .7-1.6-.4-.3-1-.5-1.8-.5-.6 0-1.1.1-1.5.4-.4.3-.6.6-.6 1.1z" fill="#fff"/><path d="M41 5l-5.2 11.9h-1.6l1.9-4.2-3.4-7.7h1.7l2.5 6 2.4-6z" fill="#fff"/><path d="M13.3 7.5c0-.5 0-.9-.1-1.4H6.8v2.6h3.7c-.2.9-.6 1.6-1.4 2.1v1.7h2.3c1.3-1.2 2-3 2-5z" fill="#4285F4"/><path d="M6.8 14.3c1.9 0 3.5-.6 4.6-1.7l-2.3-1.7c-.6.4-1.4.7-2.3.7-1.8 0-3.3-1.2-3.9-2.8H.6v1.8c1.2 2.3 3.5 3.7 6.2 3.7z" fill="#34A853"/><path d="M2.9 8.7c-.2-.5-.2-1-.2-1.5s.1-1 .2-1.5V3.9H.6C.2 4.9 0 5.9 0 7.2s.2 2.3.6 3.3z" fill="#FBBC04"/><path d="M6.8 2.9c1 0 1.9.4 2.6 1l2-2C10.2.7 8.7 0 6.8 0 4.1 0 1.8 1.5.6 3.9l2.3 1.8c.6-1.6 2.1-2.8 3.9-2.8z" fill="#EA4335"/></svg>
+        </button>
+        <button type="button" class="wallet" id="apay" aria-label="Apple Pay">
+          <svg viewBox="0 0 44 19" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M8.1 2.6c.5-.6.8-1.4.7-2.3-.7 0-1.6.5-2.1 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.6-.4 2.2-1zM8.8 3.8c-1.2-.1-2.2.7-2.8.7-.6 0-1.5-.6-2.4-.6C2.3 3.9 1.1 4.6.5 5.8c-1.3 2.2-.3 5.5.9 7.3.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2.1 0 0-1.9-.7-1.9-2.9 0-1.8 1.5-2.7 1.6-2.7-.9-1.3-2.2-1.5-2.6-1.5z"/><path d="M19.6 1.9c2.2 0 3.7 1.5 3.7 3.7s-1.6 3.7-3.8 3.7h-2.4v3.8h-1.7V1.9zm-2.5 6h2c1.5 0 2.4-.8 2.4-2.3 0-1.4-.9-2.3-2.4-2.3h-2zM23.7 10.9c0-1.4 1.1-2.3 3-2.4l2.2-.1v-.6c0-.9-.6-1.4-1.6-1.4-.9 0-1.5.4-1.6 1.1h-1.6c.1-1.5 1.3-2.5 3.3-2.5 1.9 0 3.2 1 3.2 2.6v5.5h-1.6v-1.3h-.1c-.5.9-1.5 1.4-2.5 1.4-1.5 0-2.6-.9-2.6-2.3zm5.2-.7v-.6l-1.9.1c-1 .1-1.5.5-1.5 1.1 0 .7.5 1.1 1.4 1.1 1.1 0 2-.8 2-1.7zM31.9 16.2v-1.3c.1 0 .4 0 .5 0 .7 0 1.1-.3 1.4-1.1l.2-.5-2.9-8.1h1.8l2 6.5h.1l2-6.5h1.8l-3 8.5c-.7 2-1.5 2.6-3.2 2.6-.1 0-.5 0-.7-.1z"/></svg>
+        </button>
+      </div>
 
-  <p class="note"><span data-lang="en">Accessible, responsive reference implementation accompanying defect report DR-2026-0611. Static front-end demo, no real payment is processed. Card scheme marks use official artwork.</span><span data-lang="sr">Pristupačna, responzivna referentna implementacija uz izveštaj DR-2026-0611. Statički front-end demo, ne procesira stvarno plaćanje. Marke kartica koriste zvanične logoe.</span></p>
+      <button type="button" class="cancel" id="cancel"><span data-lang="en">Cancel</span><span data-lang="sr">Odustani</span></button>
+
+      <!-- Footer -->
+      <div class="foot">
+        <div class="accepted" aria-label="Accepted payment methods">
+          <span class="mark"><img src="logos/visa.svg" alt="Visa"></span>
+          <span class="mark"><img src="logos/mastercard.svg" alt="Mastercard"></span>
+          <span class="mark"><img src="logos/maestro.svg" alt="Maestro"></span>
+          <span class="mark"><img src="logos/dinacard.svg" alt="DinaCard"></span>
+          <span class="mark"><img src="logos/unionpay.svg" alt="UnionPay"></span>
+          <span class="mark"><img src="logos/googlepay.svg" alt="Google Pay"></span>
+          <span class="mark"><img src="logos/applepay.svg" alt="Apple Pay"></span>
+        </div>
+        <div class="security">
+          <span class="vs"><img src="logos/visa_secure.svg" alt="Visa Secure"></span>
+          <span class="idc"><img src="logos/mc_idcheck.svg" alt="Mastercard ID Check"></span>
+          <span class="secured">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-lang="en">Secured by 3-D Secure</span><span data-lang="sr">Zaštićeno 3-D Secure</span>
+          </span>
+        </div>
+        <div class="poweredby">
+          <span data-lang="en">Powered by</span><span data-lang="sr">Omogućava</span>
+          <img src="logos/payten.png" alt="Payten">
+        </div>
+      </div>
+    </section>
+
+    <p class="note"><span data-lang="en">Accessible, responsive reference implementation accompanying defect report DR-2026-0611. Static front-end demo, no real payment is processed. Card scheme marks use official artwork.</span><span data-lang="sr">Pristupačna, responzivna referentna implementacija uz izveštaj DR-2026-0611. Statički front-end demo, ne procesira stvarno plaćanje. Marke kartica koriste zvanične logoe.</span></p>
+  </main>
 
 <script>
   function setLang(lang){
