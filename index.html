@@ -167,20 +167,24 @@
       <!-- Visual comparison -->
       <h2 class="sec" data-lang="en">Current page vs proposed reference</h2>
       <h2 class="sec" data-lang="sr">Trenutna stranica naspram predloga</h2>
-      <p data-lang="en">Left: the current page on an iPhone (WebKit). Right: a responsive, accessible reference implementation built in Payten brand colors, with saved-card support and official card scheme artwork. Both render the same payment in the same engine.</p>
-      <p data-lang="sr">Levo: trenutna stranica na iPhone-u (WebKit). Desno: responzivna, pristupacna referentna implementacija u Payten brend bojama, sa podrskom za sacuvane kartice i zvanicnim logoima kartica. Obe prikazuju isto placanje u istom engine-u.</p>
+      <p data-lang="en">On desktop and tablet the reference uses a horizontal two-pane layout (order summary on the left, payment on the right) that fits in the viewport, and switching between New card and Saved card does not change the form height. On phones it stacks vertically. Built in Payten brand colors with saved-card support and official card scheme artwork.</p>
+      <p data-lang="sr">Na desktopu i tabletu referenca koristi horizontalni dvopanelni layout (sazetak porudzbine levo, placanje desno) koji staje u viewport, a prelazak izmedju Nove i Sacuvane kartice ne menja visinu forme. Na telefonima se slaze vertikalno. Izradjeno u Payten brend bojama, sa podrskom za sacuvane kartice i zvanicnim logoima kartica.</p>
       <div class="compare">
         <figure>
           <img src="screenshots/before-iPhone-14.png" alt="Current page">
-          <figcaption class="bad-cap" data-lang="en">Current page <span class="sub">Horizontal overflow, small targets, low-res logos, heavy whitespace.</span></figcaption>
-          <figcaption class="bad-cap" data-lang="sr">Trenutna stranica <span class="sub">Horizontalni overflow, mali targets, logoi niske rezolucije, mnogo praznog prostora.</span></figcaption>
+          <figcaption class="bad-cap" data-lang="en">Current page (phone) <span class="sub">Horizontal overflow, small targets, low-res logos, heavy whitespace.</span></figcaption>
+          <figcaption class="bad-cap" data-lang="sr">Trenutna stranica (telefon) <span class="sub">Horizontalni overflow, mali targets, logoi niske rezolucije, mnogo praznog prostora.</span></figcaption>
         </figure>
         <figure>
-          <img src="screenshots/after-new.png" alt="Reference implementation">
-          <figcaption class="ok-cap" data-lang="en">Proposed reference <span class="sub">No overflow, 16px inputs, 44px+ targets, official vector logos, Payten branding.</span></figcaption>
-          <figcaption class="ok-cap" data-lang="sr">Predlog <span class="sub">Bez overflow-a, 16px polja, 44px+ targets, zvanicni vektorski logoi, Payten brending.</span></figcaption>
+          <img src="screenshots/after-new.png" alt="Reference implementation on phone">
+          <figcaption class="ok-cap" data-lang="en">Proposed reference (phone) <span class="sub">No overflow, 16px inputs, 44px+ targets, official vector logos, Payten branding.</span></figcaption>
+          <figcaption class="ok-cap" data-lang="sr">Predlog (telefon) <span class="sub">Bez overflow-a, 16px polja, 44px+ targets, zvanicni vektorski logoi, Payten brending.</span></figcaption>
         </figure>
       </div>
+      <figure style="margin:18px 0 0;">
+        <img src="screenshots/after-desktop.png" alt="Reference implementation on desktop" style="width:100%; border:1px solid var(--line); border-radius:6px; display:block;">
+        <figcaption class="ok-cap" style="font-size:12px; margin-top:8px; font-weight:600;"><span data-lang="en">Proposed reference (desktop / tablet) <span class="sub" style="font-weight:400; color:var(--muted);">Horizontal two-pane layout, everything visible in the viewport.</span></span><span data-lang="sr">Predlog (desktop / tablet) <span class="sub" style="font-weight:400; color:var(--muted);">Horizontalni dvopanelni layout, sve vidljivo u viewport-u.</span></span></figcaption>
+      </figure>
       <p style="text-align:center; margin-top:14px;">
         <a class="cta" href="demo/" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
