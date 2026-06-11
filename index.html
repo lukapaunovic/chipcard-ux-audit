@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UX Audit UX-2026-0611 - Responsiveness & Mobile UX, Hosted Payment Page</title>
+<style>
+  :root {
+    --ink: #1a1a1a; --ink-2: #3d3d3d; --muted: #6b6b6b;
+    --line: #d9d9d9; --line-2: #ececec; --bg: #ffffff; --panel: #f7f7f5;
+    --accent: #1f4e79; --pay-red: #ff0230;
+    --crit: #b3261e; --high: #a85700; --med: #8a6d00; --ok: #1e6b33;
+    --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  * , *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: #ebebeb; margin: 0; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .mono, code, pre, kbd { font-family: var(--mono); }
+
+  .toolbar { background: #1a1a1a; color: #ddd; }
+  .toolbar-in { max-width: 940px; margin: 0 auto; padding: 9px 22px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12.5px; }
+  .toolbar .id { letter-spacing: .03em; color: #bdbdbd; }
+  .toolbar .id b { color: #fff; font-weight: 600; }
+  .lang { display: inline-flex; align-items: center; border: 1px solid #444; border-radius: 4px; overflow: hidden; }
+  .lang svg { width: 14px; height: 14px; color: #9a9a9a; margin: 0 7px; }
+  .lang button { border: 0; background: transparent; color: #bdbdbd; font: inherit; font-size: 12px; font-weight: 600; padding: 5px 11px; cursor: pointer; }
+  .lang button.active { background: #fff; color: #1a1a1a; }
+
+  .sheet { max-width: 940px; margin: 22px auto 60px; background: var(--bg); border: 1px solid var(--line); }
+  .pad { padding: 40px 52px; }
+
+  .doc-head { border-bottom: 2px solid var(--ink); padding-bottom: 22px; margin-bottom: 26px; }
+  .doc-kicker { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .doc-head h1 { font-size: 24px; line-height: 1.25; margin: 0 0 4px; font-weight: 700; }
+  .doc-head .app { font-size: 14px; color: var(--ink-2); margin: 0; }
+
+  .meta { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--line); margin-bottom: 26px; }
+  .meta div { padding: 10px 14px; border-bottom: 1px solid var(--line-2); border-right: 1px solid var(--line-2); }
+  .meta div:nth-child(2n) { border-right: 0; }
+  .meta div:nth-last-child(-n+2) { border-bottom: 0; }
+  .meta dt { font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .meta dd { margin: 0; font-size: 13.5px; }
+  .meta dd .mono { font-size: 12.5px; word-break: break-word; }
+
+  h2.sec { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; border-bottom: 1px solid var(--line); padding-bottom: 7px; margin: 34px 0 16px; }
+  p { margin: 0 0 13px; color: var(--ink-2); }
+  ol, ul { margin: 0 0 13px; padding-left: 22px; color: var(--ink-2); }
+  li { margin-bottom: 5px; }
+
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 520px; }
+  thead th { text-align: left; background: var(--panel); border-bottom: 1px solid var(--line); padding: 9px 12px; font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--line-2); color: var(--ink-2); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .v-ok { color: var(--ok); font-weight: 600; } .v-bad { color: var(--crit); font-weight: 600; }
+
+  .sev { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 3px; white-space: nowrap; border: 1px solid; }
+  .sev-crit { color: var(--crit); border-color: #e6b3b0; background: #fbeeed; }
+  .sev-high { color: var(--high); border-color: #e6cda3; background: #fbf3e6; }
+  .sev-med  { color: var(--med); border-color: #e2d59c; background: #faf6e3; }
+  .sev-ok   { color: var(--ok); border-color: #b3d6bd; background: #eef7f0; }
+
+  .finding { border: 1px solid var(--line); margin-bottom: 22px; }
+  .finding > header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 14px 18px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  .finding > header .fid { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+  .finding > header .ftt { font-size: 15px; font-weight: 600; flex: 1; min-width: 200px; }
+  .finding-body { padding: 18px 22px; }
+  .finding-body h4 { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 16px 0 7px; }
+  .finding-body h4:first-child { margin-top: 0; }
+  .ref { font-size: 12.5px; color: var(--accent); }
+
+  pre { background: #1d1f21; color: #e6e6e6; border-radius: 4px; padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.6; margin: 0 0 14px; }
+  pre .c { color: #7f8c6a; } pre .k { color: #8ab4d8; } pre .s { color: #d99a8f; }
+  .il { background: #f0f0ee; border: 1px solid var(--line-2); padding: 0 5px; border-radius: 3px; font-size: 12.5px; }
+
+  .rec { border: 1px solid #b3d6bd; background: #f3f9f4; padding: 12px 16px; margin-top: 6px; }
+  .rec b.h { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ok); margin-bottom: 8px; }
+  .rec p { color: #234a2c; margin-bottom: 8px; }
+  .rec p:last-child { margin-bottom: 0; }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 6px 0 4px; }
+  .compare figure { margin: 0; }
+  .compare img { width: 100%; border: 1px solid var(--line); border-radius: 6px; display: block; background: #fff; }
+  .compare figcaption { font-size: 12px; margin-top: 8px; font-weight: 600; }
+  .compare .bad-cap { color: var(--crit); }
+  .compare .ok-cap { color: var(--ok); }
+  .compare .sub { font-weight: 400; color: var(--muted); font-size: 11.5px; display: block; margin-top: 2px; }
+
+  .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--pay-red); color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; padding: 12px 20px; border-radius: 8px; margin: 4px 0; }
+  .cta svg { width: 16px; height: 16px; }
+
+  .sources { font-size: 13px; }
+  .sources ol { padding-left: 20px; }
+  .sources li { margin-bottom: 8px; color: var(--ink-2); }
+  .sources a { color: var(--accent); word-break: break-word; }
+
+  .footer { border-top: 1px solid var(--line); margin-top: 30px; padding-top: 16px; font-size: 11.5px; color: var(--muted); }
+
+  body:not(.sr) [data-lang="sr"] { display: none !important; }
+  body.sr [data-lang="en"] { display: none !important; }
+
+  @media (max-width: 760px) {
+    .pad { padding: 26px 20px; }
+    .meta { grid-template-columns: 1fr; }
+    .meta div, .meta div:nth-child(2n) { border-right: 0; }
+    .compare { grid-template-columns: 1fr; }
+    .doc-head h1 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <div class="toolbar-in">
+      <span class="id">UX AUDIT &nbsp;<b>UX-2026-0611</b></span>
+      <span class="lang" role="group" aria-label="Language">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+        <button id="btn-sr" onclick="setLang('sr')">SR</button>
+      </span>
+    </div>
+  </div>
+
+  <div class="sheet">
+    <div class="pad">
+
+      <div class="doc-head">
+        <div class="doc-kicker" data-lang="en">Quality Assurance &middot; Responsiveness &amp; Mobile UX Audit</div>
+        <div class="doc-kicker" data-lang="sr">Provera kvaliteta &middot; Audit responzivnosti i mobilnog UX-a</div>
+        <h1 data-lang="en">Mobile responsiveness and UX of the Hosted Payment Page</h1>
+        <h1 data-lang="sr">Mobilna responzivnost i UX Hosted Payment Page stranice</h1>
+        <p class="app" data-lang="en">Chipcard / Payten / MerchantSafe Unipay hosted 3-D Secure payment page</p>
+        <p class="app" data-lang="sr">Chipcard / Payten / MerchantSafe Unipay hostovana 3-D Secure platna stranica</p>
+      </div>
+
+      <dl class="meta">
+        <div><dt data-lang="en">Report ID</dt><dt data-lang="sr">ID izvestaja</dt><dd class="mono">UX-2026-0611</dd></div>
+        <div><dt data-lang="en">Date</dt><dt data-lang="sr">Datum</dt><dd data-lang="en">11 June 2026</dd><dd data-lang="sr">11. jun 2026.</dd></div>
+        <div><dt data-lang="en">Application</dt><dt data-lang="sr">Aplikacija</dt><dd><span class="mono">merchantsafeunipay.com/chipcard/pay3d</span></dd></div>
+        <div><dt data-lang="en">Scope</dt><dt data-lang="sr">Obim</dt><dd data-lang="en">Layout, tap targets, keyboards, zoom, card scheme assets</dd><dd data-lang="sr">Layout, tap targets, tastature, zoom, slike kartica</dd></div>
+        <div><dt data-lang="en">Test environment</dt><dt data-lang="sr">Test okruzenje</dt><dd data-lang="en">iOS Safari / WebKit; widths 360, 375, 390, 430 px</dd><dd data-lang="sr">iOS Safari / WebKit; sirine 360, 375, 390, 430 px</dd></div>
+        <div><dt data-lang="en">Reference standards</dt><dt data-lang="sr">Referentni standardi</dt><dd data-lang="en">WCAG 2.2, Apple HIG, web.dev, Payten brand</dd><dd data-lang="sr">WCAG 2.2, Apple HIG, web.dev, Payten brend</dd></div>
+      </dl>
+
+      <!-- Summary -->
+      <h2 class="sec" data-lang="en">Findings summary</h2>
+      <h2 class="sec" data-lang="sr">Pregled nalaza</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>ID</th>
+            <th data-lang="en">Finding</th><th data-lang="sr">Nalaz</th>
+            <th data-lang="en">Severity</th><th data-lang="sr">Ozbiljnost</th>
+            <th data-lang="en">Standard</th><th data-lang="sr">Standard</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="mono">UX-01</td><td data-lang="en">Horizontal overflow on every phone width</td><td data-lang="sr">Horizontalni overflow na svim sirinama telefona</td><td><span class="sev sev-high">High</span></td><td>WCAG 1.4.10</td></tr>
+            <tr><td class="mono">UX-02</td><td data-lang="en">Zoom disabled via viewport meta</td><td data-lang="sr">Zoom onemogucen preko viewport meta taga</td><td><span class="sev sev-high">High</span></td><td>WCAG 1.4.4</td></tr>
+            <tr><td class="mono">UX-03</td><td data-lang="en">Inputs below 16px cause iOS zoom-on-focus</td><td data-lang="sr">Polja ispod 16px izazivaju iOS zoom na fokus</td><td><span class="sev sev-med">Medium</span></td><td>iOS Safari</td></tr>
+            <tr><td class="mono">UX-04</td><td data-lang="en">Tap targets below minimum size</td><td data-lang="sr">Tap targets ispod minimalne velicine</td><td><span class="sev sev-high">High</span></td><td>Apple HIG / WCAG 2.5.8</td></tr>
+            <tr><td class="mono">UX-05</td><td data-lang="en">No numeric keyboard; expiry as two dropdowns</td><td data-lang="sr">Nema numericke tastature; expiry kao dva dropdown-a</td><td><span class="sev sev-med">Medium</span></td><td>web.dev</td></tr>
+            <tr><td class="mono">UX-06</td><td data-lang="en">Card scheme logos low-resolution (see DR-2026-0611)</td><td data-lang="sr">Logoi kartica niske rezolucije (vidi DR-2026-0611)</td><td><span class="sev sev-med">Medium</span></td><td>Brand rules</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Visual comparison -->
+      <h2 class="sec" data-lang="en">Current page vs proposed reference</h2>
+      <h2 class="sec" data-lang="sr">Trenutna stranica naspram predloga</h2>
+      <p data-lang="en">Left: the current page on an iPhone (WebKit). Right: a responsive, accessible reference implementation built in Payten brand colors, with saved-card support and official card scheme artwork. Both render the same payment in the same engine.</p>
+      <p data-lang="sr">Levo: trenutna stranica na iPhone-u (WebKit). Desno: responzivna, pristupacna referentna implementacija u Payten brend bojama, sa podrskom za sacuvane kartice i zvanicnim logoima kartica. Obe prikazuju isto placanje u istom engine-u.</p>
+      <div class="compare">
+        <figure>
+          <img src="screenshots/before-iPhone-14.png" alt="Current page">
+          <figcaption class="bad-cap" data-lang="en">Current page <span class="sub">Horizontal overflow, small targets, low-res logos, heavy whitespace.</span></figcaption>
+          <figcaption class="bad-cap" data-lang="sr">Trenutna stranica <span class="sub">Horizontalni overflow, mali targets, logoi niske rezolucije, mnogo praznog prostora.</span></figcaption>
+        </figure>
+        <figure>
+          <img src="screenshots/after-new.png" alt="Reference implementation">
+          <figcaption class="ok-cap" data-lang="en">Proposed reference <span class="sub">No overflow, 16px inputs, 44px+ targets, official vector logos, Payten branding.</span></figcaption>
+          <figcaption class="ok-cap" data-lang="sr">Predlog <span class="sub">Bez overflow-a, 16px polja, 44px+ targets, zvanicni vektorski logoi, Payten brending.</span></figcaption>
+        </figure>
+      </div>
+      <p style="text-align:center; margin-top:14px;">
+        <a class="cta" href="demo/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span data-lang="en">Open the live interactive demo</span><span data-lang="sr">Otvori zivi interaktivni demo</span>
+        </a>
+      </p>
+      <p style="text-align:center; font-size:12.5px;" data-lang="en">The demo includes the New card and Saved card flows, live card formatting, scheme detection, and accessible validation.</p>
+      <p style="text-align:center; font-size:12.5px;" data-lang="sr">Demo sadrzi New card i Saved card tokove, formatiranje kartice u realnom vremenu, detekciju seme i pristupacnu validaciju.</p>
+
+      <!-- UX-01 -->
+      <h2 class="sec">UX-01</h2>
+      <div class="finding">
+        <header><span class="fid">UX-01</span><span class="ftt" data-lang="en">Horizontal overflow on every phone width</span><span class="ftt" data-lang="sr">Horizontalni overflow na svim sirinama telefona</span><span class="sev sev-high">High</span></header>
+        <div class="finding-body">
+          <h4 data-lang="en">Observation</h4><h4 data-lang="sr">Zapazanje</h4>
+          <p data-lang="en">The page content is wider than the screen on all tested phone widths, forcing horizontal scrolling. Measured with Playwright (WebKit):</p>
+          <p data-lang="sr">Sadrzaj stranice je siri od ekrana na svim testiranim sirinama telefona, sto primorava horizontalno skrolovanje. Mereno Playwright-om (WebKit):</p>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th data-lang="en">Device width</th><th data-lang="sr">Sirina uredjaja</th><th data-lang="en">Screen</th><th data-lang="sr">Ekran</th><th data-lang="en">Page width</th><th data-lang="sr">Sirina sadrzaja</th><th data-lang="en">Overflow</th><th data-lang="sr">Overflow</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone SE</td><td>375px</td><td>375px</td><td class="v-bad">401px</td><td class="v-bad" data-lang="en">yes</td><td class="v-bad" data-lang="sr">da</td></tr>
+              <tr><td>iPhone 14</td><td>390px</td><td>390px</td><td class="v-bad">403px</td><td class="v-bad" data-lang="en">yes</td><td class="v-bad" data-lang="sr">da</td></tr>
+              <tr><td>iPhone 14 Pro Max</td><td>430px</td><td>430px</td><td class="v-bad">432px</td><td class="v-bad" data-lang="en">yes</td><td class="v-bad" data-lang="sr">da</td></tr>
+              <tr><td>Galaxy S20</td><td>360px</td><td>360px</td><td class="v-bad">398px</td><td class="v-bad" data-lang="en">yes</td><td class="v-bad" data-lang="sr">da</td></tr>
+            </tbody>
+          </table></div>
+          <p class="ref">WCAG 2.2 SC 1.4.10 Reflow (Level AA): content must reflow without two-dimensional scrolling down to 320 CSS px.</p>
+          <div class="rec"><b class="h" data-lang="en">Recommendation</b><b class="h" data-lang="sr">Preporuka</b>
+            <p data-lang="en">Constrain the layout to <span class="il">max-width</span> with fluid widths, remove fixed-width elements, and use <span class="il">box-sizing: border-box</span>. The reference page has zero overflow from 360px upward.</p>
+            <p data-lang="sr">Ograniciti layout na <span class="il">max-width</span> sa fluidnim sirinama, ukloniti elemente fiksne sirine i koristiti <span class="il">box-sizing: border-box</span>. Referentna stranica nema overflow od 360px navise.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UX-02 -->
+      <h2 class="sec">UX-02</h2>
+      <div class="finding">
+        <header><span class="fid">UX-02</span><span class="ftt" data-lang="en">Zoom disabled via the viewport meta tag</span><span class="ftt" data-lang="sr">Zoom onemogucen preko viewport meta taga</span><span class="sev sev-high">High</span></header>
+        <div class="finding-body">
+          <h4 data-lang="en">Observation</h4><h4 data-lang="sr">Zapazanje</h4>
+          <p data-lang="en">The page ships this viewport meta tag, which blocks pinch-to-zoom:</p>
+          <p data-lang="sr">Stranica salje ovaj viewport meta tag, koji blokira pinch-to-zoom:</p>
+<pre>&lt;meta name="viewport" content="user-scalable=no, initial-scale=1,
+      maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"&gt;</pre>
+          <p data-lang="en">Both <span class="il">user-scalable=no</span> and <span class="il">maximum-scale=1</span> prevent users from zooming, which is a barrier for low-vision users on a screen that contains small text and a CVC field.</p>
+          <p data-lang="sr">I <span class="il">user-scalable=no</span> i <span class="il">maximum-scale=1</span> sprecavaju korisnike da zumiraju, sto je prepreka za slabovide korisnike na ekranu koji sadrzi sitan tekst i CVC polje.</p>
+          <p class="ref">WCAG 2.2 SC 1.4.4 Resize Text (Level AA): text must be resizable up to 200% without loss of content or function.</p>
+          <div class="rec"><b class="h" data-lang="en">Recommendation</b><b class="h" data-lang="sr">Preporuka</b>
+            <p data-lang="en">Use <span class="il">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</span> and remove the scaling restrictions.</p>
+            <p data-lang="sr">Koristiti <span class="il">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</span> i ukloniti ogranicenja skaliranja.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UX-03 -->
+      <h2 class="sec">UX-03</h2>
+      <div class="finding">
+        <header><span class="fid">UX-03</span><span class="ftt" data-lang="en">Inputs below 16px trigger iOS zoom-on-focus</span><span class="ftt" data-lang="sr">Polja ispod 16px izazivaju iOS zoom na fokus</span><span class="sev sev-med">Medium</span></header>
+        <div class="finding-body">
+          <h4 data-lang="en">Observation</h4><h4 data-lang="sr">Zapazanje</h4>
+          <p data-lang="en">The card number, CVC and other text inputs use a 14px font. iOS Safari automatically zooms the page when a user focuses an input whose font size is below 16px, then leaves the page zoomed in, which combined with UX-02 traps the layout.</p>
+          <p data-lang="sr">Polja za broj kartice, CVC i ostala tekstualna polja koriste font od 14px. iOS Safari automatski zumira stranicu kada korisnik fokusira polje cija je velicina fonta ispod 16px, i ostavlja stranicu zumiranom, sto u kombinaciji sa UX-02 zaglavljuje layout.</p>
+          <div class="rec"><b class="h" data-lang="en">Recommendation</b><b class="h" data-lang="sr">Preporuka</b>
+            <p data-lang="en">Set form inputs to a minimum <span class="il">font-size: 16px</span>. All inputs in the reference page are 16px.</p>
+            <p data-lang="sr">Postaviti polja na minimum <span class="il">font-size: 16px</span>. Sva polja u referentnoj stranici su 16px.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UX-04 -->
+      <h2 class="sec">UX-04</h2>
+      <div class="finding">
+        <header><span class="fid">UX-04</span><span class="ftt" data-lang="en">Tap targets below minimum size</span><span class="ftt" data-lang="sr">Tap targets ispod minimalne velicine</span><span class="sev sev-high">High</span></header>
+        <div class="finding-body">
+          <h4 data-lang="en">Observation</h4><h4 data-lang="sr">Zapazanje</h4>
+          <p data-lang="en">Several interactive elements are too small to tap reliably (measured on iPhone 14, WebKit):</p>
+          <p data-lang="sr">Vise interaktivnih elemenata je premalo za pouzdan tap (mereno na iPhone 14, WebKit):</p>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th data-lang="en">Element</th><th data-lang="sr">Element</th><th data-lang="en">Size</th><th data-lang="sr">Velicina</th><th data-lang="en">Issue</th><th data-lang="sr">Problem</th></tr></thead>
+            <tbody>
+              <tr><td data-lang="en">Card type radio</td><td data-lang="sr">Radio za tip kartice</td><td class="mono">12x12px</td><td class="v-bad" data-lang="en">below WCAG 24px minimum</td><td class="v-bad" data-lang="sr">ispod WCAG 24px minimuma</td></tr>
+              <tr><td data-lang="en">Save card checkbox</td><td data-lang="sr">Checkbox za cuvanje kartice</td><td class="mono">20x20px</td><td class="v-bad" data-lang="en">below WCAG 24px minimum</td><td class="v-bad" data-lang="sr">ispod WCAG 24px minimuma</td></tr>
+              <tr><td data-lang="en">Expiry month / year selects</td><td data-lang="sr">Select za mesec / godinu</td><td class="mono">19px tall</td><td class="v-bad" data-lang="en">below WCAG 24px minimum</td><td class="v-bad" data-lang="sr">ispod WCAG 24px minimuma</td></tr>
+              <tr><td data-lang="en">Close (x) buttons</td><td data-lang="sr">Dugmad za zatvaranje (x)</td><td class="mono">22x51px</td><td class="v-bad" data-lang="en">below 24px in one dimension</td><td class="v-bad" data-lang="sr">ispod 24px u jednoj dimenziji</td></tr>
+              <tr><td data-lang="en">Card / CVC inputs</td><td data-lang="sr">Polja kartica / CVC</td><td class="mono">42 and 34px tall</td><td data-lang="en">below Apple 44px target</td><td data-lang="sr">ispod Apple 44px targeta</td></tr>
+            </tbody>
+          </table></div>
+          <p class="ref">Apple Human Interface Guidelines: minimum 44x44 pt hit target. WCAG 2.2 SC 2.5.8 Target Size (Minimum, Level AA): 24x24 CSS px; SC 2.5.5 (Enhanced, AAA): 44x44 px.</p>
+          <div class="rec"><b class="h" data-lang="en">Recommendation</b><b class="h" data-lang="sr">Preporuka</b>
+            <p data-lang="en">Give interactive controls a minimum hit area of 44x44px (or at least the 24px WCAG minimum with adequate spacing). The reference page has no target below 44px.</p>
+            <p data-lang="sr">Dati interaktivnim kontrolama minimalnu povrsinu dodira od 44x44px (ili bar WCAG minimum od 24px uz dovoljan razmak). Referentna stranica nema target ispod 44px.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UX-05 -->
+      <h2 class="sec">UX-05</h2>
+      <div class="finding">
+        <header><span class="fid">UX-05</span><span class="ftt" data-lang="en">No numeric keyboard; expiry uses two dropdowns</span><span class="ftt" data-lang="sr">Nema numericke tastature; expiry koristi dva dropdown-a</span><span class="sev sev-med">Medium</span></header>
+        <div class="finding-body">
+          <h4 data-lang="en">Observation</h4><h4 data-lang="sr">Zapazanje</h4>
+          <p data-lang="en">Card number and CVC inputs do not set <span class="il">inputmode="numeric"</span>, so mobile users get a full alphabetic keyboard for digit-only fields. The expiry date uses two <span class="il">&lt;select&gt;</span> dropdowns (month and year), which is slower on mobile and can break autofill.</p>
+          <p data-lang="sr">Polja za broj kartice i CVC ne postavljaju <span class="il">inputmode="numeric"</span>, pa mobilni korisnici dobijaju punu alfabetsku tastaturu za polja koja primaju samo cifre. Datum isteka koristi dva <span class="il">&lt;select&gt;</span> dropdown-a (mesec i godina), sto je sporije na mobilnom i moze pokvariti autofill.</p>
+          <p class="ref">Google web.dev, Payment and address form best practices: use <span class="il">inputmode="numeric"</span> for numeric fields; prefer a single input over <span class="il">select</span> menus for dates.</p>
+          <div class="rec"><b class="h" data-lang="en">Recommendation</b><b class="h" data-lang="sr">Preporuka</b>
+            <p data-lang="en">Add <span class="il">inputmode="numeric"</span> and proper <span class="il">autocomplete</span> values (<span class="il">cc-number</span>, <span class="il">cc-exp</span>, <span class="il">cc-csc</span>), and use a single MM / YY field. The reference page does all of this.</p>
+            <p data-lang="sr">Dodati <span class="il">inputmode="numeric"</span> i ispravne <span class="il">autocomplete</span> vrednosti (<span class="il">cc-number</span>, <span class="il">cc-exp</span>, <span class="il">cc-csc</span>), i koristiti jedno MM / YY polje. Referentna stranica radi sve ovo.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UX-06 -->
+      <h2 class="sec">UX-06</h2>
+      <div class="finding">
+        <header><span class="fid">UX-06</span><span class="ftt" data-lang="en">Card scheme logos at low resolution</span><span class="ftt" data-lang="sr">Logoi kartica u niskoj rezoluciji</span><span class="sev sev-med">Medium</span></header>
+        <div class="finding-body">
+          <h4 data-lang="en">Observation</h4><h4 data-lang="sr">Zapazanje</h4>
+          <p data-lang="en">The card scheme logos are GIF/JPEG raster images around 77x46px with no <span class="il">srcset</span>, so they appear pixelated on Retina screens. This was also raised as BUG-03 in defect report DR-2026-0611.</p>
+          <p data-lang="sr">Logoi kartica su GIF/JPEG raster slike oko 77x46px bez <span class="il">srcset</span>-a, pa deluju pikselizirano na Retina ekranima. Ovo je prijavljeno i kao BUG-03 u izvestaju DR-2026-0611.</p>
+          <p data-lang="en">The reference page uses the official Visa (2021) and Mastercard (2016) vector marks with correct brand colors (Visa Blue <span class="il">#1434CB</span>; Mastercard red <span class="il">#EB001B</span>, yellow <span class="il">#F79E1B</span>, overlap <span class="il">#FF5F00</span>), and the official DinaCard vector. Vector marks stay sharp at any density and let the dev team respect each scheme's minimum size and clear-space requirements.</p>
+          <p data-lang="sr">Referentna stranica koristi zvanicne Visa (2021) i Mastercard (2016) vektorske marke sa ispravnim brend bojama (Visa Blue <span class="il">#1434CB</span>; Mastercard crvena <span class="il">#EB001B</span>, zuta <span class="il">#F79E1B</span>, preklop <span class="il">#FF5F00</span>), i zvanicni DinaCard vektor. Vektorske marke ostaju ostre na svakoj gustini i omogucavaju dev timu da postuje minimalnu velicinu i clear-space pravila svake seme.</p>
+          <p class="ref" data-lang="en">Exact minimum-size and clear-space rules are defined by each scheme's brand center (see Sources).</p>
+          <p class="ref" data-lang="sr">Tacna pravila minimalne velicine i clear-space-a definise brand centar svake seme (vidi Izvore).</p>
+        </div>
+      </div>
+
+      <!-- Branding note -->
+      <h2 class="sec" data-lang="en">Branding</h2><h2 class="sec" data-lang="sr">Brending</h2>
+      <p data-lang="en">The reference implementation uses the Payten brand palette sampled from payten.com: primary red <span class="il">#FF0230</span>, navy <span class="il">#0B1224</span>, with a purple accent <span class="il">#7C4DFF</span>. The visual direction is a clean, Stripe-style single-card checkout. Final typography should use the licensed Payten brand typeface (Myriad Pro) where available, with a system fallback.</p>
+      <p data-lang="sr">Referentna implementacija koristi Payten brend paletu uzetu sa payten.com: primarna crvena <span class="il">#FF0230</span>, navy <span class="il">#0B1224</span>, sa ljubicastim akcentom <span class="il">#7C4DFF</span>. Vizuelni pravac je cist, Stripe-style checkout u jednoj kartici. Finalna tipografija treba da koristi licencirani Payten brend font (Myriad Pro) gde je dostupan, uz system fallback.</p>
+
+      <!-- Methodology -->
+      <h2 class="sec" data-lang="en">Methodology</h2><h2 class="sec" data-lang="sr">Metodologija</h2>
+      <p data-lang="en">All measurements were taken against the live page using Playwright driving the WebKit engine (the engine every iOS browser uses), across device widths of 360, 375, 390 and 430 CSS px. Overflow, computed font sizes, tap-target bounding boxes and the viewport meta tag were read directly from the rendered DOM. The reference implementation was verified in the same engine to have zero horizontal overflow, 16px inputs and no tap target below 44px.</p>
+      <p data-lang="sr">Sva merenja su radjena nad zivom stranicom koriscenjem Playwright-a koji upravlja WebKit engine-om (engine koji koristi svaki iOS browser), na sirinama uredjaja od 360, 375, 390 i 430 CSS px. Overflow, izracunate velicine fontova, bounding box-ovi tap targeta i viewport meta tag su citani direktno iz renderovanog DOM-a. Referentna implementacija je u istom engine-u verifikovana da nema horizontalni overflow, da ima 16px polja i nijedan tap target ispod 44px.</p>
+
+      <!-- Sources -->
+      <h2 class="sec" data-lang="en">Sources</h2><h2 class="sec" data-lang="sr">Izvori</h2>
+      <div class="sources">
+        <ol>
+          <li>W3C, Understanding WCAG 2.2 SC 1.4.10 Reflow. <a href="https://www.w3.org/WAI/WCAG22/Understanding/reflow.html">w3.org/WAI/WCAG22/Understanding/reflow.html</a></li>
+          <li>W3C, Understanding WCAG 2.2 SC 1.4.4 Resize Text. <a href="https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html">w3.org/WAI/WCAG22/Understanding/resize-text.html</a></li>
+          <li>W3C, Understanding WCAG 2.2 SC 2.5.8 Target Size (Minimum). <a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html">w3.org/WAI/WCAG22/Understanding/target-size-minimum.html</a></li>
+          <li>W3C, Understanding WCAG 2.2 SC 2.5.5 Target Size (Enhanced). <a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html">w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html</a></li>
+          <li>Apple, Human Interface Guidelines (Accessibility, hit targets). <a href="https://developer.apple.com/design/human-interface-guidelines/accessibility">developer.apple.com/design/human-interface-guidelines/accessibility</a></li>
+          <li>Google web.dev, Payment and address form best practices. <a href="https://web.dev/articles/payment-and-address-form-best-practices">web.dev/articles/payment-and-address-form-best-practices</a></li>
+          <li>Visa Brand Center (logo usage, minimum size, clear space). <a href="https://www.visa.com/">visa.com</a></li>
+          <li>Mastercard Brand Center (symbol artwork, colors, minimum size, clear space). <a href="https://brand.mastercard.com/">brand.mastercard.com</a></li>
+          <li>DinaCard (National Bank of Serbia). <a href="https://www.dinacard.nbs.rs/">dinacard.nbs.rs</a></li>
+          <li>Payten brand colors sampled from <a href="https://www.payten.com/en/">payten.com</a></li>
+        </ol>
+      </div>
+
+      <div class="footer">
+        <span data-lang="en">UX-2026-0611 &middot; Measured with Playwright (WebKit / Safari engine) &middot; 11 June 2026 &middot; Companion to defect report DR-2026-0611. Card scheme marks are the property of their respective owners and are used here only to illustrate correct, compliant rendering.</span>
+        <span data-lang="sr">UX-2026-0611 &middot; Mereno Playwright-om (WebKit / Safari engine) &middot; 11. jun 2026. &middot; Prati izvestaj DR-2026-0611. Marke kartica su vlasnistvo svojih vlasnika i ovde se koriste samo da ilustruju ispravno, uskladjeno prikazivanje.</span>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  function setLang(lang){
+    document.body.classList.toggle('sr', lang === 'sr');
+    document.documentElement.lang = lang;
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-sr').classList.toggle('active', lang === 'sr');
+    try { localStorage.setItem('ux-lang', lang); } catch (e) {}
+  }
+  (function(){ var s='en'; try{ s=localStorage.getItem('ux-lang')||'en'; }catch(e){} setLang(s); })();
+</script>
+</body>
+</html>
