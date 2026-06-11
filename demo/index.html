@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!-- Zoom allowed (no user-scalable=no) per WCAG 2.2 SC 1.4.4 Resize Text -->
+<!-- Zoom allowed (no user-scalable=no) per WCAG 2.2 SC 1.4.4 -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <title>Secure checkout - Payten reference payment page</title>
@@ -25,45 +25,50 @@
     --err: #e11d48;
     --ring: rgba(255,2,48,.18);
     --shadow: 0 24px 60px -24px rgba(11,18,36,.55);
-    --radius: 14px;
   }
   * , *::before, *::after { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0; min-height: 100dvh;
-    font-family: "Myriad Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink);
     background:
       radial-gradient(1100px 520px at 85% -12%, #1b2440 0%, transparent 60%),
       radial-gradient(820px 460px at -10% 8%, #2a0f1c 0%, transparent 58%),
       var(--pay-navy);
-    padding: max(20px, env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
+    padding: max(18px, env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
   }
-  .shell { width: 100%; max-width: 430px; margin: 5vh auto 0; }
-  @media (max-height: 780px) { .shell { margin-top: 16px; } }
+  .shell { width: 100%; max-width: 430px; margin: 4vh auto 0; }
+  @media (max-height: 820px) { .shell { margin-top: 14px; } }
 
-  /* Merchant header */
+  /* Language toggle */
+  .langbar { display: flex; justify-content: flex-end; margin: 0 4px 10px; }
+  .lang { display: inline-flex; align-items: center; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; overflow: hidden; }
+  .lang svg { width: 14px; height: 14px; color: #aeb6c6; margin: 0 6px 0 10px; }
+  .lang button { border: 0; background: transparent; color: #aeb6c6; font: inherit; font-size: 13px; font-weight: 600; padding: 0 16px; cursor: pointer; min-height: 44px; min-width: 48px; }
+  .lang button.active { background: #fff; color: var(--pay-navy); }
+
+  /* Merchant header (who you pay) - Stripe convention: merchant at top */
   .merchant { display: flex; align-items: center; gap: 12px; margin: 0 6px 16px; }
   .merchant .avatar { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--pay-red), var(--pay-purple)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 18px; box-shadow: 0 8px 22px -8px rgba(255,2,48,.7); }
-  .merchant .who { line-height: 1.25; color: #e8ebf3; }
+  .merchant .who { line-height: 1.25; color: #e8ebf3; min-width: 0; }
   .merchant .who b { font-size: 15px; }
   .merchant .who span { display: block; font-size: 12.5px; color: var(--muted); }
-  .merchant .amt { margin-left: auto; text-align: right; color: #fff; }
+  .merchant .amt { margin-left: auto; text-align: right; color: #fff; white-space: nowrap; }
   .merchant .amt b { font-size: 19px; }
   .merchant .amt span { display: block; font-size: 11px; color: var(--muted); letter-spacing: .05em; }
 
-  .card { background: var(--card); border-radius: 20px; box-shadow: var(--shadow); padding: 20px 20px 22px; }
+  .card { background: var(--card); border-radius: 20px; box-shadow: var(--shadow); padding: 20px 20px 18px; }
 
-  /* Express wallets */
   .wallets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .wallet { height: 48px; border-radius: 12px; border: 0; cursor: pointer; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
   .wallet:active { transform: translateY(1px); }
   .wallet svg { height: 21px; width: auto; display: block; }
 
-  .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; margin: 16px 0 14px; }
+  .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; margin: 16px 0 14px; text-align: center; }
   .divider::before, .divider::after { content: ""; height: 1px; background: var(--line); flex: 1; }
 
-  /* Segmented control: New card / Saved card (Stripe-style) */
+  /* Segmented control */
   .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 16px; }
   .segmented button { min-height: 44px; border: 0; background: transparent; border-radius: 9px; font: inherit; font-size: 14px; font-weight: 600; color: var(--ink-2); cursor: pointer; transition: .15s; -webkit-tap-highlight-color: transparent; }
   .segmented button[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(11,18,36,.12); }
@@ -71,22 +76,35 @@
   .panel { display: none; }
   .panel.active { display: block; }
 
-  /* Fields */
   .field { margin-top: 14px; }
   .field:first-child { margin-top: 0; }
-  .field > label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+  .field > label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; line-height: 1.3; }
   .control { position: relative; display: flex; align-items: center; background: var(--field); border: 1.5px solid var(--line); border-radius: 12px; transition: border-color .15s, box-shadow .15s, background .15s; }
   .control:focus-within { border-color: var(--pay-red); background: var(--field-focus); box-shadow: 0 0 0 4px var(--ring); }
   .control.invalid { border-color: var(--err); box-shadow: 0 0 0 4px rgba(225,29,72,.16); }
-  /* 16px font prevents iOS Safari zoom-on-focus; 52px height exceeds 44px min target (Apple HIG / WCAG 2.5.5) */
+  /* 16px font prevents iOS Safari zoom-on-focus; 52px height exceeds 44px target */
   .control input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; font: inherit; font-size: 16px; color: var(--ink); height: 52px; padding: 0 14px; }
-  .control .trail { display: flex; align-items: center; gap: 6px; padding: 0 12px; }
-  .scheme { height: 20px; width: 30px; display: block; object-fit: contain; opacity: .3; transition: opacity .15s; }
+  .control .trail { display: flex; align-items: center; gap: 6px; padding: 0 12px; flex-shrink: 0; }
+  .scheme { height: 20px; width: 30px; display: block; object-fit: contain; opacity: .28; transition: opacity .15s; }
   .scheme.on { opacity: 1; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .row > .field { min-width: 0; }
+
+  /* Row that keeps Expiry and CVC perfectly aligned */
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  .row > .field { min-width: 0; margin-top: 14px; }
+  .row > .field > label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
   .err-msg { font-size: 12.5px; color: var(--err); margin-top: 6px; display: none; }
   .field.invalid .err-msg { display: block; }
+
+  /* Save card */
+  .savecard { display: flex; align-items: center; gap: 10px; margin-top: 16px; cursor: pointer; min-height: 44px; }
+  .savecard input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .savecard .box { width: 22px; height: 22px; border: 2px solid var(--line); border-radius: 6px; display: grid; place-items: center; flex-shrink: 0; transition: .15s; }
+  .savecard input:checked + .box { background: var(--pay-red); border-color: var(--pay-red); }
+  .savecard .box svg { width: 14px; height: 14px; color: #fff; opacity: 0; }
+  .savecard input:checked + .box svg { opacity: 1; }
+  .savecard span { font-size: 13.5px; color: var(--ink-2); }
+  .savecard input:focus-visible + .box { box-shadow: 0 0 0 4px var(--ring); }
 
   /* Saved card rows */
   .saved-list { display: flex; flex-direction: column; gap: 10px; }
@@ -95,12 +113,14 @@
   .saved input { position: absolute; opacity: 0; width: 0; height: 0; }
   .saved .brand { width: 46px; height: 30px; border-radius: 5px; border: 1px solid var(--line); display: grid; place-items: center; background: #fff; flex-shrink: 0; padding: 4px; }
   .saved .brand img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
-  .saved .info { line-height: 1.3; }
+  .saved .info { line-height: 1.3; min-width: 0; }
   .saved .info b { font-size: 14.5px; letter-spacing: .02em; }
   .saved .info span { display: block; font-size: 12.5px; color: var(--muted); }
   .saved .radio { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; flex-shrink: 0; }
   .saved:has(input:checked) .radio { border-color: var(--pay-red); }
   .saved:has(input:checked) .radio::after { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--pay-red); }
+  .saved-actions { margin-top: 10px; }
+  .saved-actions a { color: var(--pay-red); font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
 
   .pay { margin-top: 20px; width: 100%; height: 54px; border: 0; border-radius: 13px; cursor: pointer; background: var(--pay-red); color: #fff; font: inherit; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 9px; transition: background .15s, transform .05s; -webkit-tap-highlight-color: transparent; }
   .pay:hover { background: var(--pay-red-press); }
@@ -111,49 +131,77 @@
 
   .secured { display: flex; align-items: center; justify-content: center; gap: 7px; color: var(--muted); font-size: 12px; margin-top: 16px; }
   .secured svg { width: 14px; height: 14px; }
-  /* Footer scheme marks: vector, generous size with clear space (Visa/Mastercard min-size + clear-space rules) */
-  .schemes-foot { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; }
+
+  /* Security program badges (3-D Secure) - official vector */
+  .badges { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 12px; }
+  .badges .vs { height: 34px; }
+  .badges .idc { height: 22px; }
+  .badges img { height: 100%; width: auto; display: block; }
+
+  /* Accepted scheme marks - official vectors, uniform tiles with clear space */
+  .schemes-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; }
   .schemes-foot .mark { width: 46px; height: 30px; border: 1px solid var(--line); border-radius: 6px; background: #fff; display: grid; place-items: center; padding: 5px 6px; }
   .schemes-foot .mark img { max-width: 100%; max-height: 100%; width: auto; display: block; object-fit: contain; }
 
-  .note { color: var(--muted); font-size: 11.5px; text-align: center; margin: 16px 6px 0; line-height: 1.5; }
+  /* Gateway branding - Stripe convention: processor at the very bottom */
+  .poweredby { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+  .poweredby img { height: 16px; width: auto; display: block; }
+
+  .note { color: var(--muted); font-size: 11.5px; text-align: center; margin: 14px 6px 0; line-height: 1.5; }
+
+  body:not(.sr) [data-lang="sr"] { display: none !important; }
+  body.sr [data-lang="en"] { display: none !important; }
 </style>
 </head>
 <body>
   <main class="shell">
 
+    <div class="langbar">
+      <span class="lang" role="group" aria-label="Language">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+        <button id="btn-sr" onclick="setLang('sr')">SR</button>
+      </span>
+    </div>
+
+    <!-- Merchant (who you pay) at the top -->
     <div class="merchant">
       <div class="avatar">Z</div>
-      <div class="who"><b>zona.dcx.rs</b><span>Secure payment</span></div>
-      <div class="amt"><b>4,009.04</b><span>RSD</span></div>
+      <div class="who">
+        <b>zona.dcx.rs</b>
+        <span data-lang="en">Merchant</span><span data-lang="sr">Trgovac</span>
+      </div>
+      <div class="amt">
+        <b>4,009.04 RSD</b>
+        <span data-lang="en">Transaction amount</span><span data-lang="sr">Iznos transakcije</span>
+      </div>
     </div>
 
     <section class="card">
 
       <div class="wallets">
-        <button type="button" class="wallet" id="gpay" aria-label="Pay with Google Pay">
+        <button type="button" class="wallet" id="gpay" aria-label="Google Pay">
           <svg viewBox="0 0 41 17" xmlns="http://www.w3.org/2000/svg"><path d="M19.5 8.4v4.9h-1.6V1.4h4.1c1 0 1.9.3 2.6 1 .7.6 1.1 1.5 1.1 2.4 0 1-.4 1.8-1.1 2.4-.7.7-1.6 1-2.6 1h-2.5zm0-5.5v4h2.6c.6 0 1.1-.2 1.5-.6.8-.8.8-2 0-2.8-.4-.4-.9-.6-1.5-.6z" fill="#fff"/><path d="M28.9 4.7c1.1 0 2 .3 2.7.9.6.6 1 1.4 1 2.5v5.2h-1.5v-1.2h-.1c-.6 1-1.5 1.4-2.5 1.4-.9 0-1.7-.3-2.3-.8-.6-.5-.9-1.2-.9-2 0-.9.3-1.5.9-2 .7-.5 1.5-.7 2.6-.7.9 0 1.7.2 2.2.5v-.4c0-.5-.2-1-.6-1.3-.4-.4-.9-.5-1.5-.5-.8 0-1.5.4-2 1l-1.4-.9c.8-1 1.9-1.4 3.4-1.4zm-2.1 6.3c0 .4.2.7.5.9.3.3.7.4 1.1.4.6 0 1.2-.2 1.6-.7.5-.4.7-1 .7-1.6-.4-.3-1-.5-1.8-.5-.6 0-1.1.1-1.5.4-.4.3-.6.6-.6 1.1z" fill="#fff"/><path d="M41 5l-5.2 11.9h-1.6l1.9-4.2-3.4-7.7h1.7l2.5 6 2.4-6z" fill="#fff"/><path d="M13.3 7.5c0-.5 0-.9-.1-1.4H6.8v2.6h3.7c-.2.9-.6 1.6-1.4 2.1v1.7h2.3c1.3-1.2 2-3 2-5z" fill="#4285F4"/><path d="M6.8 14.3c1.9 0 3.5-.6 4.6-1.7l-2.3-1.7c-.6.4-1.4.7-2.3.7-1.8 0-3.3-1.2-3.9-2.8H.6v1.8c1.2 2.3 3.5 3.7 6.2 3.7z" fill="#34A853"/><path d="M2.9 8.7c-.2-.5-.2-1-.2-1.5s.1-1 .2-1.5V3.9H.6C.2 4.9 0 5.9 0 7.2s.2 2.3.6 3.3z" fill="#FBBC04"/><path d="M6.8 2.9c1 0 1.9.4 2.6 1l2-2C10.2.7 8.7 0 6.8 0 4.1 0 1.8 1.5.6 3.9l2.3 1.8c.6-1.6 2.1-2.8 3.9-2.8z" fill="#EA4335"/></svg>
         </button>
-        <button type="button" class="wallet" id="apay" aria-label="Pay with Apple Pay">
+        <button type="button" class="wallet" id="apay" aria-label="Apple Pay">
           <svg viewBox="0 0 44 19" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M8.1 2.6c.5-.6.8-1.4.7-2.3-.7 0-1.6.5-2.1 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.6-.4 2.2-1zM8.8 3.8c-1.2-.1-2.2.7-2.8.7-.6 0-1.5-.6-2.4-.6C2.3 3.9 1.1 4.6.5 5.8c-1.3 2.2-.3 5.5.9 7.3.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2.1 0 0-1.9-.7-1.9-2.9 0-1.8 1.5-2.7 1.6-2.7-.9-1.3-2.2-1.5-2.6-1.5z"/><path d="M19.6 1.9c2.2 0 3.7 1.5 3.7 3.7s-1.6 3.7-3.8 3.7h-2.4v3.8h-1.7V1.9zm-2.5 6h2c1.5 0 2.4-.8 2.4-2.3 0-1.4-.9-2.3-2.4-2.3h-2zM23.7 10.9c0-1.4 1.1-2.3 3-2.4l2.2-.1v-.6c0-.9-.6-1.4-1.6-1.4-.9 0-1.5.4-1.6 1.1h-1.6c.1-1.5 1.3-2.5 3.3-2.5 1.9 0 3.2 1 3.2 2.6v5.5h-1.6v-1.3h-.1c-.5.9-1.5 1.4-2.5 1.4-1.5 0-2.6-.9-2.6-2.3zm5.2-.7v-.6l-1.9.1c-1 .1-1.5.5-1.5 1.1 0 .7.5 1.1 1.4 1.1 1.1 0 2-.8 2-1.7zM31.9 16.2v-1.3c.1 0 .4 0 .5 0 .7 0 1.1-.3 1.4-1.1l.2-.5-2.9-8.1h1.8l2 6.5h.1l2-6.5h1.8l-3 8.5c-.7 2-1.5 2.6-3.2 2.6-.1 0-.5 0-.7-.1z"/></svg>
         </button>
       </div>
 
-      <div class="divider">or pay with card</div>
+      <div class="divider"><span data-lang="en">or pay with card</span><span data-lang="sr">ili platite karticom</span></div>
 
-      <!-- Segmented control -->
       <div class="segmented" role="tablist" aria-label="Card source">
-        <button role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new">New card</button>
-        <button role="tab" id="tab-saved" aria-selected="false" aria-controls="panel-saved">Saved card</button>
+        <button role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new"><span data-lang="en">New card</span><span data-lang="sr">Nova kartica</span></button>
+        <button role="tab" id="tab-saved" aria-selected="false" aria-controls="panel-saved"><span data-lang="en">Saved card</span><span data-lang="sr">Sačuvana kartica</span></button>
       </div>
 
-      <form id="payform" novalidate>
+      <form id="payform" method="post" novalidate>
 
         <!-- NEW CARD -->
         <div class="panel active" id="panel-new" role="tabpanel" aria-labelledby="tab-new">
           <div class="field" id="f-card">
-            <label for="card">Card number</label>
-            <div class="control" id="c-card">
+            <label for="card"><span data-lang="en">Card number</span><span data-lang="sr">Broj kartice</span></label>
+            <div class="control">
               <input id="card" name="cardnumber" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" aria-describedby="card-err">
               <span class="trail">
                 <img class="scheme" id="sc-visa" src="logos/visa.svg" alt="" aria-hidden="true">
@@ -161,80 +209,119 @@
                 <img class="scheme" id="sc-dina" src="logos/dinacard.svg" alt="" aria-hidden="true">
               </span>
             </div>
-            <p class="err-msg" id="card-err">Please enter a valid card number.</p>
+            <p class="err-msg" id="card-err"><span data-lang="en">Please enter a valid card number.</span><span data-lang="sr">Unesite ispravan broj kartice.</span></p>
           </div>
+
+          <div class="field" id="f-name">
+            <label for="ccname"><span data-lang="en">Name on card</span><span data-lang="sr">Ime na kartici</span></label>
+            <div class="control"><input id="ccname" name="ccname" type="text" autocomplete="cc-name" autocapitalize="words" placeholder="MARKO MARKOVIĆ"></div>
+          </div>
+
           <div class="row">
             <div class="field" id="f-exp">
-              <label for="exp">Expiry</label>
+              <label for="exp"><span data-lang="en">Expiration date</span><span data-lang="sr">Datum isteka</span></label>
               <div class="control"><input id="exp" name="exp-date" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"></div>
-              <p class="err-msg">Invalid date.</p>
+              <p class="err-msg"><span data-lang="en">Invalid date.</span><span data-lang="sr">Neispravan datum.</span></p>
             </div>
             <div class="field" id="f-cvc">
-              <label for="cvc">CVC</label>
+              <label for="cvc">CVC2 / CVV2</label>
               <div class="control">
                 <input id="cvc" name="cvc" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4">
                 <span class="trail"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true"><rect x=".5" y=".5" width="21" height="15" rx="2.5" stroke="#8a93a6"/><rect x="3" y="9" width="9" height="2" rx="1" fill="#8a93a6"/></svg></span>
               </div>
-              <p class="err-msg">Invalid CVC.</p>
+              <p class="err-msg"><span data-lang="en">Invalid code.</span><span data-lang="sr">Neispravan kod.</span></p>
             </div>
+          </div>
+
+          <label class="savecard">
+            <input type="checkbox" id="saveCard" name="saveCard" value="YES">
+            <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span data-lang="en">Save card for future payments</span><span data-lang="sr">Sačuvajte karticu za buduća plaćanja</span>
+          </label>
+
+          <div class="field" id="f-cardname" style="display:none;">
+            <label for="cardName"><span data-lang="en">Card name</span><span data-lang="sr">Ime kartice</span></label>
+            <div class="control"><input id="cardName" name="cardName" type="text" placeholder=""></div>
           </div>
         </div>
 
         <!-- SAVED CARD -->
         <div class="panel" id="panel-saved" role="tabpanel" aria-labelledby="tab-saved">
-          <div class="saved-list" id="saved-list">
+          <div class="saved-list" id="saved-list" role="radiogroup" aria-label="Choose card">
             <label class="saved">
               <input type="radio" name="saved-card" value="visa-4242" checked>
               <span class="brand"><img src="logos/visa.svg" alt="Visa"></span>
-              <span class="info"><b>Visa &bull;&bull;&bull;&bull; 4242</b><span>Expires 08 / 27</span></span>
+              <span class="info"><b>Visa &bull;&bull;&bull;&bull; 4242</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 08 / 27</span></span>
               <span class="radio"></span>
             </label>
             <label class="saved">
               <input type="radio" name="saved-card" value="mc-5555">
               <span class="brand"><img src="logos/mastercard.svg" alt="Mastercard"></span>
-              <span class="info"><b>Mastercard &bull;&bull;&bull;&bull; 5555</b><span>Expires 11 / 26</span></span>
+              <span class="info"><b>Mastercard &bull;&bull;&bull;&bull; 5555</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 11 / 26</span></span>
               <span class="radio"></span>
             </label>
             <label class="saved">
               <input type="radio" name="saved-card" value="dina-9931">
               <span class="brand"><img src="logos/dinacard.svg" alt="DinaCard"></span>
-              <span class="info"><b>DinaCard &bull;&bull;&bull;&bull; 9931</b><span>Expires 03 / 28</span></span>
+              <span class="info"><b>DinaCard &bull;&bull;&bull;&bull; 9931</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 03 / 28</span></span>
               <span class="radio"></span>
             </label>
           </div>
-          <div class="field" id="f-scvc" style="margin-top:16px;">
-            <label for="scvc">CVC for the selected card</label>
-            <div class="control" style="max-width:140px;">
+          <div class="saved-actions"><a href="#" id="editCard"><span data-lang="en">Edit card</span><span data-lang="sr">Uredi karticu</span></a></div>
+          <div class="field" id="f-scvc" style="margin-top:6px;">
+            <label for="scvc">CVC2 / CVV2</label>
+            <div class="control" style="max-width:150px;">
               <input id="scvc" name="saved-cvc" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4">
               <span class="trail"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true"><rect x=".5" y=".5" width="21" height="15" rx="2.5" stroke="#8a93a6"/><rect x="3" y="9" width="9" height="2" rx="1" fill="#8a93a6"/></svg></span>
             </div>
-            <p class="err-msg">Invalid CVC.</p>
+            <p class="err-msg"><span data-lang="en">Invalid code.</span><span data-lang="sr">Neispravan kod.</span></p>
           </div>
         </div>
 
         <button type="submit" class="pay" id="pay">
           <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-          Pay 4,009.04 RSD
+          <span><span data-lang="en">Pay</span><span data-lang="sr">Plati</span> 4,009.04 RSD</span>
         </button>
-        <button type="button" class="cancel" id="cancel">Cancel and return to merchant</button>
+        <button type="button" class="cancel" id="cancel"><span data-lang="en">Cancel</span><span data-lang="sr">Odustani</span></button>
       </form>
 
       <div class="secured">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Secured by 3-D Secure
+        <span data-lang="en">Secured by 3-D Secure</span><span data-lang="sr">Zaštićeno 3-D Secure tehnologijom</span>
       </div>
+
+      <div class="badges" aria-label="3-D Secure programs">
+        <span class="vs"><img src="logos/visa_secure.svg" alt="Visa Secure"></span>
+        <span class="idc"><img src="logos/mc_idcheck.svg" alt="Mastercard ID Check"></span>
+      </div>
+
       <div class="schemes-foot" aria-label="Accepted cards">
         <span class="mark"><img src="logos/visa.svg" alt="Visa"></span>
         <span class="mark"><img src="logos/mastercard.svg" alt="Mastercard"></span>
+        <span class="mark"><img src="logos/maestro.svg" alt="Maestro"></span>
         <span class="mark"><img src="logos/dinacard.svg" alt="DinaCard"></span>
+        <span class="mark"><img src="logos/unionpay.svg" alt="UnionPay"></span>
+      </div>
+
+      <div class="poweredby">
+        <span data-lang="en">Powered by</span><span data-lang="sr">Omogućava</span>
+        <img src="logos/payten.png" alt="Payten">
       </div>
     </section>
 
-    <p class="note">Accessible, responsive reference implementation accompanying defect report DR-2026-0611. Static front-end demo, no real payment is processed. Card scheme marks use official artwork and colors at compliant sizes.</p>
+    <p class="note"><span data-lang="en">Accessible, responsive reference implementation accompanying defect report DR-2026-0611. Static front-end demo, no real payment is processed. Card scheme marks use official artwork.</span><span data-lang="sr">Pristupačna, responzivna referentna implementacija uz izveštaj DR-2026-0611. Statički front-end demo, ne procesira stvarno plaćanje. Marke kartica koriste zvanične logoe.</span></p>
   </main>
 
 <script>
-  // ---- Segmented control ----
+  function setLang(lang){
+    document.body.classList.toggle('sr', lang === 'sr');
+    document.documentElement.lang = lang;
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-sr').classList.toggle('active', lang === 'sr');
+    try { localStorage.setItem('demo-lang', lang); } catch(e){}
+  }
+  (function(){ var s='en'; try{ s=localStorage.getItem('demo-lang')||'en'; }catch(e){} setLang(s); })();
+
   var tabNew = document.getElementById('tab-new'), tabSaved = document.getElementById('tab-saved');
   function selectTab(which){
     var isNew = which === 'new';
@@ -245,15 +332,15 @@
   tabNew.addEventListener('click', function(){ selectTab('new'); });
   tabSaved.addEventListener('click', function(){ selectTab('saved'); });
 
-  // ---- Card helpers ----
   var card = document.getElementById('card'), exp = document.getElementById('exp'), cvc = document.getElementById('cvc');
   function digits(s){ return (s||'').replace(/\D/g,''); }
   function scheme(n){ if(/^4/.test(n)) return 'visa'; if(/^(5[1-5]|2[2-7])/.test(n)) return 'mc'; if(/^(9891|657371|657372)/.test(n)) return 'dina'; return null; }
   function luhn(n){ var s=0,a=false; for(var i=n.length-1;i>=0;i--){var d=+n[i]; if(a){d*=2; if(d>9)d-=9;} s+=d; a=!a;} return n.length>=13 && s%10===0; }
-  function clear(id){ var f=document.getElementById(id); f.classList.remove('invalid'); f.querySelector('.control').classList.remove('invalid'); }
-  function bad(id){ var f=document.getElementById(id); f.classList.add('invalid'); f.querySelector('.control').classList.add('invalid'); }
+  function clear(id){ var f=document.getElementById(id); f.classList.remove('invalid'); var c=f.querySelector('.control'); if(c)c.classList.remove('invalid'); }
+  function bad(id){ var f=document.getElementById(id); f.classList.add('invalid'); var c=f.querySelector('.control'); if(c)c.classList.add('invalid'); }
 
-  card.addEventListener('input', function(){
+  // Autofill-friendly: read from the field on input/change (browser autofill fires both)
+  function onCardInput(){
     var n = digits(card.value).slice(0,19);
     card.value = n.replace(/(.{4})/g,'$1 ').trim();
     var s = scheme(n);
@@ -261,10 +348,18 @@
     document.getElementById('sc-mc').classList.toggle('on', s==='mc');
     document.getElementById('sc-dina').classList.toggle('on', s==='dina');
     clear('f-card');
-  });
-  exp.addEventListener('input', function(){ var n=digits(exp.value).slice(0,4); exp.value = n.length>=3 ? n.slice(0,2)+' / '+n.slice(2) : n; clear('f-exp'); });
+  }
+  card.addEventListener('input', onCardInput);
+  card.addEventListener('change', onCardInput);
+  function onExp(){ var n=digits(exp.value).slice(0,4); exp.value = n.length>=3 ? n.slice(0,2)+' / '+n.slice(2) : n; clear('f-exp'); }
+  exp.addEventListener('input', onExp); exp.addEventListener('change', onExp);
   cvc.addEventListener('input', function(){ cvc.value = digits(cvc.value).slice(0,4); clear('f-cvc'); });
   document.getElementById('scvc').addEventListener('input', function(){ this.value = digits(this.value).slice(0,4); clear('f-scvc'); });
+
+  // Save card -> reveal "Card name" field (matches gateway flow)
+  document.getElementById('saveCard').addEventListener('change', function(){
+    document.getElementById('f-cardname').style.display = this.checked ? 'block' : 'none';
+  });
 
   document.getElementById('payform').addEventListener('submit', function(e){
     e.preventDefault();
@@ -279,11 +374,12 @@
     }
     if (!ok) { var fi = document.querySelector('.field.invalid input'); if (fi) fi.focus(); return; }
     var btn = document.getElementById('pay');
-    btn.disabled = true; btn.textContent = 'Processing...';
-    setTimeout(function(){ btn.textContent = 'Approved \u2713'; btn.style.background = '#16a34a'; }, 1200);
+    btn.disabled = true; btn.textContent = (document.body.classList.contains('sr') ? 'Obrada...' : 'Processing...');
+    setTimeout(function(){ btn.textContent = (document.body.classList.contains('sr') ? 'Odobreno \u2713' : 'Approved \u2713'); btn.style.background = '#16a34a'; }, 1200);
   });
 
   document.getElementById('cancel').addEventListener('click', function(){ history.length>1 ? history.back() : alert('Returning to merchant.'); });
+  document.getElementById('editCard').addEventListener('click', function(e){ e.preventDefault(); });
   document.getElementById('gpay').addEventListener('click', function(){ alert('Google Pay sheet would open here.'); });
   document.getElementById('apay').addEventListener('click', function(){ alert('Apple Pay sheet would open here.'); });
 </script>
