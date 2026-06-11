@@ -37,26 +37,36 @@
     padding: max(18px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
     display: flex; flex-direction: column; align-items: center;
   }
+  .shell { width: 100%; max-width: 760px; }
 
-  .shell { width: 100%; max-width: 440px; }
-
-  /* Language toggle with flags */
+  /* Language dropdown */
   .langbar { display: flex; justify-content: flex-end; margin: 2px 2px 12px; }
-  .lang { display: inline-flex; align-items: center; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 3px; gap: 2px; }
-  .lang button { display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent; color: #c2c9d6; font: inherit; font-size: 13px; font-weight: 600; padding: 0 14px; cursor: pointer; min-height: 44px; border-radius: 999px; -webkit-tap-highlight-color: transparent; }
-  .lang button.active { background: #fff; color: var(--pay-navy); }
-  .lang button img { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; display: block; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+  .langsel { position: relative; }
+  .langbtn { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18); color: #e8ebf3; font: inherit; font-size: 13px; font-weight: 600; padding: 0 12px; min-height: 44px; border-radius: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .langbtn img { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; display: block; box-shadow: 0 0 0 1px rgba(0,0,0,.12); }
+  .langbtn .chev { width: 16px; height: 16px; transition: transform .15s; opacity: .8; }
+  .langsel.open .langbtn .chev { transform: rotate(180deg); }
+  .langmenu { position: absolute; top: calc(100% + 6px); right: 0; min-width: 150px; background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 14px 36px -12px rgba(11,18,36,.4); padding: 5px; margin: 0; list-style: none; z-index: 20; display: none; }
+  .langsel.open .langmenu { display: block; }
+  .langmenu li { display: flex; align-items: center; gap: 9px; padding: 0 12px; min-height: 44px; border-radius: 7px; cursor: pointer; font-size: 14px; color: var(--ink); }
+  .langmenu li:hover, .langmenu li:focus-visible { background: var(--field); outline: none; }
+  .langmenu li img { width: 22px; height: 15px; border-radius: 2px; object-fit: cover; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+  body:not(.sr) #langmenu li[data-set-lang="en"] { display: none; }
+  body.sr #langmenu li[data-set-lang="sr"] { display: none; }
 
-  .card { background: var(--card); border-radius: 20px; box-shadow: var(--shadow); padding: 22px 20px 20px; }
+  .card { background: var(--card); border-radius: 20px; box-shadow: var(--shadow); padding: 22px 22px 18px; }
 
-  /* Merchant chip */
-  .merchant { display: flex; align-items: center; gap: 12px; padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
-  .merchant .avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--pay-red), var(--pay-purple)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 19px; flex-shrink: 0; box-shadow: 0 8px 22px -8px rgba(255,2,48,.5); }
-  .merchant .who { line-height: 1.3; min-width: 0; }
-  .merchant .who small { font-size: 11.5px; color: var(--muted); display: block; }
-  .merchant .who b { font-size: 16px; display: block; overflow: hidden; text-overflow: ellipsis; }
+  /* Head (merchant + order number) */
+  .head-col .merchant { display: flex; align-items: center; gap: 12px; }
+  .head-col .avatar { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--pay-red), var(--pay-purple)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 18px; flex-shrink: 0; box-shadow: 0 8px 22px -8px rgba(255,2,48,.5); }
+  .head-col .who { line-height: 1.3; min-width: 0; }
+  .head-col .who small { font-size: 11.5px; color: var(--muted); display: block; }
+  .head-col .who b { font-size: 15.5px; display: block; overflow: hidden; text-overflow: ellipsis; }
+  .head-col .ordnum { margin-top: 12px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .head-col .ordnum .lbl { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+  .head-col .ordnum .ord { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13px; color: var(--ink-2); }
 
-  .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 16px; }
+  .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 14px; }
   .segmented button { min-height: 44px; border: 0; background: transparent; border-radius: 9px; font: inherit; font-size: 14px; font-weight: 600; color: var(--ink-2); cursor: pointer; transition: .15s; -webkit-tap-highlight-color: transparent; }
   .segmented button[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(11,18,36,.12); }
 
@@ -65,7 +75,7 @@
   .panel { visibility: hidden; }
   .panel.active { visibility: visible; }
 
-  .field { margin-top: 14px; }
+  .field { margin-top: 13px; }
   .field:first-child { margin-top: 0; }
   .field > label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; line-height: 1.3; }
   .control { position: relative; display: flex; align-items: center; background: var(--field); border: 1.5px solid var(--line); border-radius: 12px; transition: border-color .15s, box-shadow .15s, background .15s; }
@@ -75,13 +85,13 @@
   .control .trail { display: flex; align-items: center; gap: 6px; padding: 0 12px; flex-shrink: 0; }
   .scheme { height: 20px; width: 30px; display: block; object-fit: contain; opacity: .28; transition: opacity .15s; }
   .scheme.on { opacity: 1; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
-  .row > .field { min-width: 0; margin-top: 14px; }
-  .row > .field > label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rowf { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  .rowf > .field { min-width: 0; margin-top: 13px; }
+  .rowf > .field > label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .err-msg { font-size: 12.5px; color: var(--err); margin-top: 6px; display: none; }
   .field.invalid .err-msg { display: block; }
 
-  .savecard { display: flex; align-items: center; gap: 10px; margin-top: 16px; cursor: pointer; min-height: 44px; }
+  .savecard { display: flex; align-items: center; gap: 10px; margin-top: 14px; cursor: pointer; min-height: 44px; }
   .savecard input { position: absolute; opacity: 0; width: 0; height: 0; }
   .savecard .box { width: 22px; height: 22px; border: 2px solid var(--line); border-radius: 6px; display: grid; place-items: center; flex-shrink: 0; transition: .15s; }
   .savecard input:checked + .box { background: var(--pay-red); border-color: var(--pay-red); }
@@ -90,43 +100,45 @@
   .savecard span { font-size: 13.5px; color: var(--ink-2); }
   .savecard input:focus-visible + .box { box-shadow: 0 0 0 4px var(--ring); }
 
+  /* Saved cards: inline CVC replaces the radio on the selected row */
   .saved-list { display: flex; flex-direction: column; gap: 10px; }
-  .saved { display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; cursor: pointer; min-height: 60px; transition: border-color .15s, background .15s; }
+  .saved { display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; min-height: 60px; transition: border-color .15s, background .15s; }
+  .saved input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
   .saved:has(input:checked) { border-color: var(--pay-red); background: #fff5f6; }
-  .saved input { position: absolute; opacity: 0; width: 0; height: 0; }
   .saved .brand { width: 46px; height: 30px; border-radius: 5px; border: 1px solid var(--line); display: grid; place-items: center; background: #fff; flex-shrink: 0; padding: 4px; overflow: hidden; }
   .saved .brand img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
   .saved .info { line-height: 1.3; min-width: 0; }
-  .saved .info b { font-size: 14.5px; letter-spacing: .02em; }
-  .saved .info span { display: block; font-size: 12.5px; color: var(--muted); }
-  .saved .radio { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; flex-shrink: 0; }
-  .saved:has(input:checked) .radio { border-color: var(--pay-red); }
-  .saved:has(input:checked) .radio::after { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--pay-red); }
-  .saved-actions { margin-top: 10px; }
-  .saved-actions a { color: var(--pay-red); font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
+  .saved .info b { font-size: 14px; letter-spacing: .02em; }
+  .saved .info span { display: block; font-size: 12px; color: var(--muted); }
+  .saved .pick { margin-left: auto; flex-shrink: 0; display: flex; align-items: center; }
+  .saved .radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; }
+  .saved .cvc-in { display: none; width: 78px; height: 46px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; font: inherit; font-size: 16px; text-align: center; color: var(--ink); outline: none; }
+  .saved .cvc-in:focus { border-color: var(--pay-red); box-shadow: 0 0 0 3px var(--ring); }
+  .saved:has(input:checked) .radio { display: none; }
+  .saved:has(input:checked) .cvc-in { display: block; }
 
-  /* Transaction amount (red) before Pay */
-  .amount { display: flex; align-items: baseline; justify-content: space-between; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
-  .amount .lbl { font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-  .amount .val { font-size: 22px; font-weight: 800; color: var(--pay-red); }
-
-  .pay { margin-top: 14px; width: 100%; height: 54px; border: 0; border-radius: 13px; cursor: pointer; background: var(--pay-red); color: #fff; font: inherit; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 9px; transition: background .15s, transform .05s; -webkit-tap-highlight-color: transparent; }
-  .pay:hover { background: var(--pay-red-press); }
-  .pay:active { transform: translateY(1px); }
-  .pay:disabled { opacity: .55; cursor: not-allowed; }
-  .pay .lock { width: 16px; height: 16px; }
-
-  /* Express wallets - below card form (alternative payment) */
-  .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; margin: 18px 0 14px; }
-  .divider::before, .divider::after { content: ""; height: 1px; background: var(--line); flex: 1; }
+  /* Summary column (right on desktop): express wallets, divider, centered amount, pay */
   .wallets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .wallet { height: 48px; border-radius: 12px; border: 0; cursor: pointer; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
   .wallet:active { transform: translateY(1px); }
   .wallet svg { height: 21px; width: auto; display: block; }
+  .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; margin: 14px 0; }
+  .divider::before, .divider::after { content: ""; height: 1px; background: var(--line); flex: 1; }
 
-  .cancel { display: block; width: 100%; min-height: 44px; text-align: center; margin-top: 12px; background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; padding: 10px; cursor: pointer; }
+  .amount-center { text-align: center; margin: 4px 0 0; }
+  .amount-center .lbl { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: block; }
+  .amount-center .amt { font-size: 26px; font-weight: 800; color: var(--pay-red); display: block; margin-top: 3px; }
 
-  /* Footer: accepted marks + security + powered by */
+  .pay { margin-top: 12px; width: 100%; height: 54px; border: 0; border-radius: 13px; cursor: pointer; background: var(--pay-red); color: #fff; font: inherit; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 9px; transition: background .15s, transform .05s; -webkit-tap-highlight-color: transparent; }
+  .pay:hover { background: var(--pay-red-press); }
+  .pay:active { transform: translateY(1px); }
+  .pay:disabled { opacity: .55; cursor: not-allowed; }
+  .pay .lock { width: 16px; height: 16px; }
+  .secured-cta { display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--muted); font-size: 12px; margin-top: 10px; }
+  .secured-cta svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .cancel { display: block; width: 100%; min-height: 44px; text-align: center; margin-top: 6px; background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; padding: 10px; cursor: pointer; }
+
+  /* Footer */
   .foot { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
   .foot .accepted { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; }
   .foot .mark { width: 50px; height: 32px; border: 1px solid var(--line); border-radius: 6px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 5px 6px; overflow: hidden; flex: 0 0 auto; }
@@ -134,18 +146,27 @@
   .foot .security { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
   .foot .security .vs { height: 30px; } .foot .security .idc { height: 20px; }
   .foot .security img { height: 100%; width: auto; display: block; }
-  .foot .secured { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
-  .foot .secured svg { width: 14px; height: 14px; flex-shrink: 0; }
   .foot .poweredby { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 14px; color: var(--muted); font-size: 12px; }
   .foot .poweredby img { height: 15px; width: auto; display: block; }
 
-  .note { color: rgba(255,255,255,.5); font-size: 11.5px; text-align: center; margin: 14px auto 0; max-width: 440px; line-height: 1.5; }
+  .note { color: rgba(255,255,255,.5); font-size: 11.5px; text-align: center; margin: 14px auto 0; max-width: 760px; line-height: 1.5; }
 
   body:not(.sr) [data-lang="sr"] { display: none !important; }
   body.sr [data-lang="en"] { display: none !important; }
 
-  /* Phone: panels use natural height (length may change, allowed on phone) */
-  @media (max-width: 559px) {
+  /* ----- Desktop / tablet: form left, head + summary right, top-aligned ----- */
+  @media (min-width: 720px) {
+    .checkout { display: grid; grid-template-columns: 1fr 286px; grid-template-areas: "form head" "form summary"; grid-template-rows: auto auto; align-items: start; align-content: start; }
+    .form-col { grid-area: form; padding-right: 26px; border-right: 1px solid var(--line); }
+    .head-col { grid-area: head; padding: 0 0 16px 26px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+    .summary-col { grid-area: summary; padding-left: 26px; }
+  }
+  /* ----- Phone: single column, head -> form -> summary ----- */
+  @media (max-width: 719px) {
+    .checkout { display: flex; flex-direction: column; }
+    .head-col { order: 1; padding-bottom: 16px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+    .form-col { order: 2; }
+    .summary-col { order: 3; margin-top: 16px; }
     .panels { display: block; }
     .panel { visibility: visible; display: none; }
     .panel.active { display: block; }
@@ -156,130 +177,147 @@
   <main class="shell">
 
     <div class="langbar">
-      <span class="lang" role="group" aria-label="Language">
-        <button id="btn-en" class="active" onclick="setLang('en')"><img src="logos/flag-gb.svg" alt="">EN</button>
-        <button id="btn-sr" onclick="setLang('sr')"><img src="logos/flag-rs.svg" alt="">SR</button>
-      </span>
+      <div class="langsel" id="langsel">
+        <button type="button" class="langbtn" id="langbtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Language">
+          <img id="langflag" src="logos/flag-gb.svg" alt=""><span id="langlabel">EN</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <ul class="langmenu" id="langmenu" role="listbox" aria-label="Choose language">
+          <li role="option" data-set-lang="en" tabindex="0"><img src="logos/flag-gb.svg" alt="">English</li>
+          <li role="option" data-set-lang="sr" tabindex="0"><img src="logos/flag-rs.svg" alt="">Srpski</li>
+        </ul>
+      </div>
     </div>
 
     <section class="card">
+      <form id="payform" class="checkout" method="post" novalidate>
 
-      <!-- Merchant -->
-      <div class="merchant">
-        <div class="avatar">Z</div>
-        <div class="who">
-          <small data-lang="en">You are paying</small><small data-lang="sr">Plaćate</small>
-          <b>zona.dcx.rs</b>
+        <!-- HEAD: merchant + order number (first item of right sidebar on desktop) -->
+        <div class="head-col">
+          <div class="merchant">
+            <div class="avatar">Z</div>
+            <div class="who">
+              <small data-lang="en">You are paying</small><small data-lang="sr">Plaćate</small>
+              <b>zona.dcx.rs</b>
+            </div>
+          </div>
+          <div class="ordnum">
+            <span class="lbl" data-lang="en">Order number</span><span class="lbl" data-lang="sr">Broj narudžbine</span>
+            <span class="ord">pred-165905-045f</span>
+          </div>
         </div>
-      </div>
 
-      <div class="segmented" role="tablist" aria-label="Card source">
-        <button role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new"><span data-lang="en">New card</span><span data-lang="sr">Nova kartica</span></button>
-        <button role="tab" id="tab-saved" aria-selected="false" aria-controls="panel-saved"><span data-lang="en">Saved card</span><span data-lang="sr">Sačuvana kartica</span></button>
-      </div>
+        <!-- LEFT: card form -->
+        <div class="form-col">
+          <div class="segmented" role="tablist" aria-label="Card source">
+            <button type="button" role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new"><span data-lang="en">New card</span><span data-lang="sr">Nova kartica</span></button>
+            <button type="button" role="tab" id="tab-saved" aria-selected="false" aria-controls="panel-saved"><span data-lang="en">Saved card</span><span data-lang="sr">Sačuvana kartica</span></button>
+          </div>
 
-      <form id="payform" method="post" novalidate>
-        <div class="panels">
-          <!-- NEW CARD -->
-          <div class="panel active" id="panel-new" role="tabpanel" aria-labelledby="tab-new">
-            <div class="field" id="f-card">
-              <label for="card"><span data-lang="en">Card number</span><span data-lang="sr">Broj kartice</span></label>
-              <div class="control">
-                <input id="card" name="cardnumber" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" aria-describedby="card-err">
-                <span class="trail">
-                  <img class="scheme" id="sc-visa" src="logos/visa.svg" alt="" aria-hidden="true">
-                  <img class="scheme" id="sc-mc" src="logos/mastercard.svg" alt="" aria-hidden="true">
-                  <img class="scheme" id="sc-dina" src="logos/dinacard.svg" alt="" aria-hidden="true">
-                </span>
-              </div>
-              <p class="err-msg" id="card-err"><span data-lang="en">Please enter a valid card number.</span><span data-lang="sr">Unesite ispravan broj kartice.</span></p>
-            </div>
-
-            <div class="field" id="f-name">
-              <label for="ccname"><span data-lang="en">Name on card</span><span data-lang="sr">Ime na kartici</span></label>
-              <div class="control"><input id="ccname" name="ccname" type="text" autocomplete="cc-name" autocapitalize="words" placeholder="MARKO MARKOVIĆ"></div>
-            </div>
-
-            <div class="row">
-              <div class="field" id="f-exp">
-                <label for="exp"><span data-lang="en">Expiration date</span><span data-lang="sr">Datum isteka</span></label>
-                <div class="control"><input id="exp" name="exp-date" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"></div>
-                <p class="err-msg"><span data-lang="en">Invalid date.</span><span data-lang="sr">Neispravan datum.</span></p>
-              </div>
-              <div class="field" id="f-cvc">
-                <label for="cvc">CVC2 / CVV2</label>
+          <div class="panels">
+            <!-- NEW CARD -->
+            <div class="panel active" id="panel-new" role="tabpanel" aria-labelledby="tab-new">
+              <div class="field" id="f-card">
+                <label for="card"><span data-lang="en">Card number</span><span data-lang="sr">Broj kartice</span></label>
                 <div class="control">
-                  <input id="cvc" name="cvc" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4">
-                  <span class="trail"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true"><rect x=".5" y=".5" width="21" height="15" rx="2.5" stroke="#8a93a6"/><rect x="3" y="9" width="9" height="2" rx="1" fill="#8a93a6"/></svg></span>
+                  <input id="card" name="cardnumber" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" aria-describedby="card-err">
+                  <span class="trail">
+                    <img class="scheme" id="sc-visa" src="logos/visa.svg" alt="" aria-hidden="true">
+                    <img class="scheme" id="sc-mc" src="logos/mastercard.svg" alt="" aria-hidden="true">
+                    <img class="scheme" id="sc-dina" src="logos/dinacard.svg" alt="" aria-hidden="true">
+                  </span>
                 </div>
-                <p class="err-msg"><span data-lang="en">Invalid code.</span><span data-lang="sr">Neispravan kod.</span></p>
+                <p class="err-msg" id="card-err"><span data-lang="en">Please enter a valid card number.</span><span data-lang="sr">Unesite ispravan broj kartice.</span></p>
               </div>
+
+              <div class="field" id="f-name">
+                <label for="ccname"><span data-lang="en">Name on card</span><span data-lang="sr">Ime na kartici</span></label>
+                <div class="control"><input id="ccname" name="ccname" type="text" autocomplete="cc-name" autocapitalize="words" placeholder="MARKO MARKOVIĆ"></div>
+              </div>
+
+              <div class="rowf">
+                <div class="field" id="f-exp">
+                  <label for="exp"><span data-lang="en">Expiration date</span><span data-lang="sr">Datum isteka</span></label>
+                  <div class="control"><input id="exp" name="exp-date" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"></div>
+                  <p class="err-msg"><span data-lang="en">Invalid date.</span><span data-lang="sr">Neispravan datum.</span></p>
+                </div>
+                <div class="field" id="f-cvc">
+                  <label for="cvc">CVC2 / CVV2</label>
+                  <div class="control">
+                    <input id="cvc" name="cvc" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4">
+                    <span class="trail"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true"><rect x=".5" y=".5" width="21" height="15" rx="2.5" stroke="#8a93a6"/><rect x="3" y="9" width="9" height="2" rx="1" fill="#8a93a6"/></svg></span>
+                  </div>
+                  <p class="err-msg"><span data-lang="en">Invalid code.</span><span data-lang="sr">Neispravan kod.</span></p>
+                </div>
+              </div>
+
+              <label class="savecard">
+                <input type="checkbox" id="saveCard" name="saveCard" value="YES">
+                <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+                <span data-lang="en">Save card for future payments</span><span data-lang="sr">Sačuvajte karticu za buduća plaćanja</span>
+              </label>
             </div>
 
-            <label class="savecard">
-              <input type="checkbox" id="saveCard" name="saveCard" value="YES">
-              <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
-              <span data-lang="en">Save card for future payments</span><span data-lang="sr">Sačuvajte karticu za buduća plaćanja</span>
-            </label>
-          </div>
-
-          <!-- SAVED CARD -->
-          <div class="panel" id="panel-saved" role="tabpanel" aria-labelledby="tab-saved">
-            <div class="saved-list" role="radiogroup" aria-label="Choose card">
-              <label class="saved">
-                <input type="radio" name="saved-card" value="visa-4242" checked>
-                <span class="brand"><img src="logos/visa.svg" alt="Visa"></span>
-                <span class="info"><b>Visa &bull;&bull;&bull;&bull; 4242</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 08 / 27</span></span>
-                <span class="radio"></span>
-              </label>
-              <label class="saved">
-                <input type="radio" name="saved-card" value="mc-5555">
-                <span class="brand"><img src="logos/mastercard.svg" alt="Mastercard"></span>
-                <span class="info"><b>Mastercard &bull;&bull;&bull;&bull; 5555</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 11 / 26</span></span>
-                <span class="radio"></span>
-              </label>
-              <label class="saved">
-                <input type="radio" name="saved-card" value="dina-9931">
-                <span class="brand"><img src="logos/dinacard.svg" alt="DinaCard"></span>
-                <span class="info"><b>DinaCard &bull;&bull;&bull;&bull; 9931</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 03 / 28</span></span>
-                <span class="radio"></span>
-              </label>
-            </div>
-            <div class="saved-actions"><a href="#" id="editCard"><span data-lang="en">Edit card</span><span data-lang="sr">Uredi karticu</span></a></div>
-            <div class="field" id="f-scvc">
-              <label for="scvc">CVC2 / CVV2</label>
-              <div class="control" style="max-width:150px;">
-                <input id="scvc" name="saved-cvc" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4">
-                <span class="trail"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true"><rect x=".5" y=".5" width="21" height="15" rx="2.5" stroke="#8a93a6"/><rect x="3" y="9" width="9" height="2" rx="1" fill="#8a93a6"/></svg></span>
+            <!-- SAVED CARD: CVC inline in place of the radio -->
+            <div class="panel" id="panel-saved" role="tabpanel" aria-labelledby="tab-saved">
+              <div class="saved-list" role="radiogroup" aria-label="Choose card">
+                <div class="saved" data-card="visa-4242">
+                  <input type="radio" name="saved-card" value="visa-4242" checked>
+                  <span class="brand"><img src="logos/visa.svg" alt="Visa"></span>
+                  <span class="info"><b>Visa &bull;&bull;&bull;&bull; 4242</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 08 / 27</span></span>
+                  <span class="pick"><span class="radio"></span><input class="cvc-in" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="CVC" maxlength="4" aria-label="CVC"></span>
+                </div>
+                <div class="saved" data-card="mc-5555">
+                  <input type="radio" name="saved-card" value="mc-5555">
+                  <span class="brand"><img src="logos/mastercard.svg" alt="Mastercard"></span>
+                  <span class="info"><b>Mastercard &bull;&bull;&bull;&bull; 5555</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 11 / 26</span></span>
+                  <span class="pick"><span class="radio"></span><input class="cvc-in" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="CVC" maxlength="4" aria-label="CVC"></span>
+                </div>
+                <div class="saved" data-card="dina-9931">
+                  <input type="radio" name="saved-card" value="dina-9931">
+                  <span class="brand"><img src="logos/dinacard.svg" alt="DinaCard"></span>
+                  <span class="info"><b>DinaCard &bull;&bull;&bull;&bull; 9931</b><span><span data-lang="en">Expires</span><span data-lang="sr">Ističe</span> 03 / 28</span></span>
+                  <span class="pick"><span class="radio"></span><input class="cvc-in" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="CVC" maxlength="4" aria-label="CVC"></span>
+                </div>
               </div>
-              <p class="err-msg"><span data-lang="en">Invalid code.</span><span data-lang="sr">Neispravan kod.</span></p>
+              <div class="field" style="margin-top:12px;">
+                <a href="#" id="editCard" style="color:var(--pay-red); font-size:13px; font-weight:600; text-decoration:none; display:inline-flex; min-height:44px; align-items:center;"><span data-lang="en">Edit saved cards</span><span data-lang="sr">Uredi sačuvane kartice</span></a>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="amount">
-          <span class="lbl" data-lang="en">Transaction amount</span><span class="lbl" data-lang="sr">Iznos transakcije</span>
-          <span class="val">4,009.04 RSD</span>
-        </div>
+        <!-- RIGHT: express wallets (above), divider, centered amount, Pay, secured -->
+        <aside class="summary-col">
+          <div class="wallets">
+            <button type="button" class="wallet" id="gpay" aria-label="Google Pay">
+              <svg viewBox="0 0 41 17" xmlns="http://www.w3.org/2000/svg"><path d="M19.5 8.4v4.9h-1.6V1.4h4.1c1 0 1.9.3 2.6 1 .7.6 1.1 1.5 1.1 2.4 0 1-.4 1.8-1.1 2.4-.7.7-1.6 1-2.6 1h-2.5zm0-5.5v4h2.6c.6 0 1.1-.2 1.5-.6.8-.8.8-2 0-2.8-.4-.4-.9-.6-1.5-.6z" fill="#fff"/><path d="M28.9 4.7c1.1 0 2 .3 2.7.9.6.6 1 1.4 1 2.5v5.2h-1.5v-1.2h-.1c-.6 1-1.5 1.4-2.5 1.4-.9 0-1.7-.3-2.3-.8-.6-.5-.9-1.2-.9-2 0-.9.3-1.5.9-2 .7-.5 1.5-.7 2.6-.7.9 0 1.7.2 2.2.5v-.4c0-.5-.2-1-.6-1.3-.4-.4-.9-.5-1.5-.5-.8 0-1.5.4-2 1l-1.4-.9c.8-1 1.9-1.4 3.4-1.4zm-2.1 6.3c0 .4.2.7.5.9.3.3.7.4 1.1.4.6 0 1.2-.2 1.6-.7.5-.4.7-1 .7-1.6-.4-.3-1-.5-1.8-.5-.6 0-1.1.1-1.5.4-.4.3-.6.6-.6 1.1z" fill="#fff"/><path d="M41 5l-5.2 11.9h-1.6l1.9-4.2-3.4-7.7h1.7l2.5 6 2.4-6z" fill="#fff"/><path d="M13.3 7.5c0-.5 0-.9-.1-1.4H6.8v2.6h3.7c-.2.9-.6 1.6-1.4 2.1v1.7h2.3c1.3-1.2 2-3 2-5z" fill="#4285F4"/><path d="M6.8 14.3c1.9 0 3.5-.6 4.6-1.7l-2.3-1.7c-.6.4-1.4.7-2.3.7-1.8 0-3.3-1.2-3.9-2.8H.6v1.8c1.2 2.3 3.5 3.7 6.2 3.7z" fill="#34A853"/><path d="M2.9 8.7c-.2-.5-.2-1-.2-1.5s.1-1 .2-1.5V3.9H.6C.2 4.9 0 5.9 0 7.2s.2 2.3.6 3.3z" fill="#FBBC04"/><path d="M6.8 2.9c1 0 1.9.4 2.6 1l2-2C10.2.7 8.7 0 6.8 0 4.1 0 1.8 1.5.6 3.9l2.3 1.8c.6-1.6 2.1-2.8 3.9-2.8z" fill="#EA4335"/></svg>
+            </button>
+            <button type="button" class="wallet" id="apay" aria-label="Apple Pay">
+              <svg viewBox="0 0 44 19" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M8.1 2.6c.5-.6.8-1.4.7-2.3-.7 0-1.6.5-2.1 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.6-.4 2.2-1zM8.8 3.8c-1.2-.1-2.2.7-2.8.7-.6 0-1.5-.6-2.4-.6C2.3 3.9 1.1 4.6.5 5.8c-1.3 2.2-.3 5.5.9 7.3.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2.1 0 0-1.9-.7-1.9-2.9 0-1.8 1.5-2.7 1.6-2.7-.9-1.3-2.2-1.5-2.6-1.5z"/><path d="M19.6 1.9c2.2 0 3.7 1.5 3.7 3.7s-1.6 3.7-3.8 3.7h-2.4v3.8h-1.7V1.9zm-2.5 6h2c1.5 0 2.4-.8 2.4-2.3 0-1.4-.9-2.3-2.4-2.3h-2zM23.7 10.9c0-1.4 1.1-2.3 3-2.4l2.2-.1v-.6c0-.9-.6-1.4-1.6-1.4-.9 0-1.5.4-1.6 1.1h-1.6c.1-1.5 1.3-2.5 3.3-2.5 1.9 0 3.2 1 3.2 2.6v5.5h-1.6v-1.3h-.1c-.5.9-1.5 1.4-2.5 1.4-1.5 0-2.6-.9-2.6-2.3zm5.2-.7v-.6l-1.9.1c-1 .1-1.5.5-1.5 1.1 0 .7.5 1.1 1.4 1.1 1.1 0 2-.8 2-1.7zM31.9 16.2v-1.3c.1 0 .4 0 .5 0 .7 0 1.1-.3 1.4-1.1l.2-.5-2.9-8.1h1.8l2 6.5h.1l2-6.5h1.8l-3 8.5c-.7 2-1.5 2.6-3.2 2.6-.1 0-.5 0-.7-.1z"/></svg>
+            </button>
+          </div>
 
-        <button type="submit" class="pay" id="pay">
-          <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-          <span data-lang="en">Pay</span><span data-lang="sr">Plati</span>
-        </button>
+          <div class="divider"><span data-lang="en">or pay with card</span><span data-lang="sr">ili platite karticom</span></div>
+
+          <div class="amount-center">
+            <span class="lbl" data-lang="en">Transaction amount</span><span class="lbl" data-lang="sr">Iznos transakcije</span>
+            <span class="amt">4,009.04 RSD</span>
+          </div>
+
+          <button type="submit" class="pay" id="pay">
+            <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            <span data-lang="en">Pay</span><span data-lang="sr">Plati</span>
+          </button>
+
+          <div class="secured-cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-lang="en">Secured by 3-D Secure</span><span data-lang="sr">Zaštićeno 3-D Secure</span>
+          </div>
+
+          <button type="button" class="cancel" id="cancel"><span data-lang="en">Cancel</span><span data-lang="sr">Odustani</span></button>
+        </aside>
       </form>
-
-      <!-- Express alternatives -->
-      <div class="divider"><span data-lang="en">or pay with</span><span data-lang="sr">ili platite sa</span></div>
-      <div class="wallets">
-        <button type="button" class="wallet" id="gpay" aria-label="Google Pay">
-          <svg viewBox="0 0 41 17" xmlns="http://www.w3.org/2000/svg"><path d="M19.5 8.4v4.9h-1.6V1.4h4.1c1 0 1.9.3 2.6 1 .7.6 1.1 1.5 1.1 2.4 0 1-.4 1.8-1.1 2.4-.7.7-1.6 1-2.6 1h-2.5zm0-5.5v4h2.6c.6 0 1.1-.2 1.5-.6.8-.8.8-2 0-2.8-.4-.4-.9-.6-1.5-.6z" fill="#fff"/><path d="M28.9 4.7c1.1 0 2 .3 2.7.9.6.6 1 1.4 1 2.5v5.2h-1.5v-1.2h-.1c-.6 1-1.5 1.4-2.5 1.4-.9 0-1.7-.3-2.3-.8-.6-.5-.9-1.2-.9-2 0-.9.3-1.5.9-2 .7-.5 1.5-.7 2.6-.7.9 0 1.7.2 2.2.5v-.4c0-.5-.2-1-.6-1.3-.4-.4-.9-.5-1.5-.5-.8 0-1.5.4-2 1l-1.4-.9c.8-1 1.9-1.4 3.4-1.4zm-2.1 6.3c0 .4.2.7.5.9.3.3.7.4 1.1.4.6 0 1.2-.2 1.6-.7.5-.4.7-1 .7-1.6-.4-.3-1-.5-1.8-.5-.6 0-1.1.1-1.5.4-.4.3-.6.6-.6 1.1z" fill="#fff"/><path d="M41 5l-5.2 11.9h-1.6l1.9-4.2-3.4-7.7h1.7l2.5 6 2.4-6z" fill="#fff"/><path d="M13.3 7.5c0-.5 0-.9-.1-1.4H6.8v2.6h3.7c-.2.9-.6 1.6-1.4 2.1v1.7h2.3c1.3-1.2 2-3 2-5z" fill="#4285F4"/><path d="M6.8 14.3c1.9 0 3.5-.6 4.6-1.7l-2.3-1.7c-.6.4-1.4.7-2.3.7-1.8 0-3.3-1.2-3.9-2.8H.6v1.8c1.2 2.3 3.5 3.7 6.2 3.7z" fill="#34A853"/><path d="M2.9 8.7c-.2-.5-.2-1-.2-1.5s.1-1 .2-1.5V3.9H.6C.2 4.9 0 5.9 0 7.2s.2 2.3.6 3.3z" fill="#FBBC04"/><path d="M6.8 2.9c1 0 1.9.4 2.6 1l2-2C10.2.7 8.7 0 6.8 0 4.1 0 1.8 1.5.6 3.9l2.3 1.8c.6-1.6 2.1-2.8 3.9-2.8z" fill="#EA4335"/></svg>
-        </button>
-        <button type="button" class="wallet" id="apay" aria-label="Apple Pay">
-          <svg viewBox="0 0 44 19" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M8.1 2.6c.5-.6.8-1.4.7-2.3-.7 0-1.6.5-2.1 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.6-.4 2.2-1zM8.8 3.8c-1.2-.1-2.2.7-2.8.7-.6 0-1.5-.6-2.4-.6C2.3 3.9 1.1 4.6.5 5.8c-1.3 2.2-.3 5.5.9 7.3.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2.1 0 0-1.9-.7-1.9-2.9 0-1.8 1.5-2.7 1.6-2.7-.9-1.3-2.2-1.5-2.6-1.5z"/><path d="M19.6 1.9c2.2 0 3.7 1.5 3.7 3.7s-1.6 3.7-3.8 3.7h-2.4v3.8h-1.7V1.9zm-2.5 6h2c1.5 0 2.4-.8 2.4-2.3 0-1.4-.9-2.3-2.4-2.3h-2zM23.7 10.9c0-1.4 1.1-2.3 3-2.4l2.2-.1v-.6c0-.9-.6-1.4-1.6-1.4-.9 0-1.5.4-1.6 1.1h-1.6c.1-1.5 1.3-2.5 3.3-2.5 1.9 0 3.2 1 3.2 2.6v5.5h-1.6v-1.3h-.1c-.5.9-1.5 1.4-2.5 1.4-1.5 0-2.6-.9-2.6-2.3zm5.2-.7v-.6l-1.9.1c-1 .1-1.5.5-1.5 1.1 0 .7.5 1.1 1.4 1.1 1.1 0 2-.8 2-1.7zM31.9 16.2v-1.3c.1 0 .4 0 .5 0 .7 0 1.1-.3 1.4-1.1l.2-.5-2.9-8.1h1.8l2 6.5h.1l2-6.5h1.8l-3 8.5c-.7 2-1.5 2.6-3.2 2.6-.1 0-.5 0-.7-.1z"/></svg>
-        </button>
-      </div>
-
-      <button type="button" class="cancel" id="cancel"><span data-lang="en">Cancel</span><span data-lang="sr">Odustani</span></button>
 
       <!-- Footer -->
       <div class="foot">
@@ -295,10 +333,6 @@
         <div class="security">
           <span class="vs"><img src="logos/visa_secure.svg" alt="Visa Secure"></span>
           <span class="idc"><img src="logos/mc_idcheck.svg" alt="Mastercard ID Check"></span>
-          <span class="secured">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span data-lang="en">Secured by 3-D Secure</span><span data-lang="sr">Zaštićeno 3-D Secure</span>
-          </span>
         </div>
         <div class="poweredby">
           <span data-lang="en">Powered by</span><span data-lang="sr">Omogućava</span>
@@ -311,15 +345,27 @@
   </main>
 
 <script>
+  /* ----- Language dropdown ----- */
   function setLang(lang){
     document.body.classList.toggle('sr', lang === 'sr');
     document.documentElement.lang = lang;
-    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-    document.getElementById('btn-sr').classList.toggle('active', lang === 'sr');
+    document.getElementById('langflag').src = (lang === 'sr') ? 'logos/flag-rs.svg' : 'logos/flag-gb.svg';
+    document.getElementById('langlabel').textContent = (lang === 'sr') ? 'SR' : 'EN';
     try { localStorage.setItem('demo-lang', lang); } catch(e){}
   }
+  var langsel = document.getElementById('langsel'), langbtn = document.getElementById('langbtn');
+  function openMenu(o){ langsel.classList.toggle('open', o); langbtn.setAttribute('aria-expanded', o ? 'true':'false'); }
+  langbtn.addEventListener('click', function(e){ e.stopPropagation(); openMenu(!langsel.classList.contains('open')); });
+  document.querySelectorAll('#langmenu li').forEach(function(li){
+    function choose(){ setLang(li.getAttribute('data-set-lang')); openMenu(false); langbtn.focus(); }
+    li.addEventListener('click', choose);
+    li.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); choose(); } });
+  });
+  document.addEventListener('click', function(){ openMenu(false); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') openMenu(false); });
   (function(){ var s='en'; try{ s=localStorage.getItem('demo-lang')||'en'; }catch(e){} setLang(s); })();
 
+  /* ----- Segmented tabs ----- */
   var tabNew = document.getElementById('tab-new'), tabSaved = document.getElementById('tab-saved');
   function selectTab(which){
     var isNew = which === 'new';
@@ -330,13 +376,22 @@
   tabNew.addEventListener('click', function(){ selectTab('new'); });
   tabSaved.addEventListener('click', function(){ selectTab('saved'); });
 
+  /* ----- Saved card selection (inline CVC) ----- */
+  document.querySelectorAll('.saved').forEach(function(row){
+    row.addEventListener('click', function(e){
+      if (e.target.closest('.cvc-in')) return;
+      row.querySelector('input[type=radio]').checked = true;
+      var cvc = row.querySelector('.cvc-in'); if (cvc) cvc.focus();
+    });
+  });
+
+  /* ----- Card helpers ----- */
   var card = document.getElementById('card'), exp = document.getElementById('exp'), cvc = document.getElementById('cvc');
   function digits(s){ return (s||'').replace(/\D/g,''); }
   function scheme(n){ if(/^4/.test(n)) return 'visa'; if(/^(5[1-5]|2[2-7])/.test(n)) return 'mc'; if(/^(9891|657371|657372)/.test(n)) return 'dina'; return null; }
   function luhn(n){ var s=0,a=false; for(var i=n.length-1;i>=0;i--){var d=+n[i]; if(a){d*=2; if(d>9)d-=9;} s+=d; a=!a;} return n.length>=13 && s%10===0; }
-  function clear(id){ var f=document.getElementById(id); f.classList.remove('invalid'); var c=f.querySelector('.control'); if(c)c.classList.remove('invalid'); }
+  function clr(id){ var f=document.getElementById(id); f.classList.remove('invalid'); var c=f.querySelector('.control'); if(c)c.classList.remove('invalid'); }
   function bad(id){ var f=document.getElementById(id); f.classList.add('invalid'); var c=f.querySelector('.control'); if(c)c.classList.add('invalid'); }
-
   function onCardInput(){
     var n = digits(card.value).slice(0,19);
     card.value = n.replace(/(.{4})/g,'$1 ').trim();
@@ -344,14 +399,13 @@
     document.getElementById('sc-visa').classList.toggle('on', s==='visa');
     document.getElementById('sc-mc').classList.toggle('on', s==='mc');
     document.getElementById('sc-dina').classList.toggle('on', s==='dina');
-    clear('f-card');
+    clr('f-card');
   }
-  card.addEventListener('input', onCardInput);
-  card.addEventListener('change', onCardInput);
-  function onExp(){ var n=digits(exp.value).slice(0,4); exp.value = n.length>=3 ? n.slice(0,2)+' / '+n.slice(2) : n; clear('f-exp'); }
+  card.addEventListener('input', onCardInput); card.addEventListener('change', onCardInput);
+  function onExp(){ var n=digits(exp.value).slice(0,4); exp.value = n.length>=3 ? n.slice(0,2)+' / '+n.slice(2) : n; clr('f-exp'); }
   exp.addEventListener('input', onExp); exp.addEventListener('change', onExp);
-  cvc.addEventListener('input', function(){ cvc.value = digits(cvc.value).slice(0,4); clear('f-cvc'); });
-  document.getElementById('scvc').addEventListener('input', function(){ this.value = digits(this.value).slice(0,4); clear('f-scvc'); });
+  cvc.addEventListener('input', function(){ cvc.value = digits(cvc.value).slice(0,4); clr('f-cvc'); });
+  document.querySelectorAll('.cvc-in').forEach(function(i){ i.addEventListener('input', function(){ i.value = digits(i.value).slice(0,4); }); });
 
   document.getElementById('payform').addEventListener('submit', function(e){
     e.preventDefault();
@@ -362,7 +416,9 @@
       if (!(em.length===4 && mm>=1 && mm<=12)) { bad('f-exp'); ok=false; }
       if (digits(cvc.value).length < 3) { bad('f-cvc'); ok=false; }
     } else {
-      if (digits(document.getElementById('scvc').value).length < 3) { bad('f-scvc'); ok=false; }
+      var sel = document.querySelector('.saved input:checked');
+      var ci = sel ? sel.closest('.saved').querySelector('.cvc-in') : null;
+      if (!ci || digits(ci.value).length < 3) { if(ci){ ci.style.borderColor='var(--err)'; ci.focus(); } ok=false; }
     }
     if (!ok) { var fi = document.querySelector('.panel.active .field.invalid input'); if (fi) fi.focus(); return; }
     var btn = document.getElementById('pay');
